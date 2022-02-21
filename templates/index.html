@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Spudooli House</title>
+  <link rel="stylesheet" href={{ url_for('static', filename='climacons-font.css' ) }} />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- <script src="scope.js" type="text/javascript"></script> -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js" type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+  <script src={{ url_for('static', filename='mqtt.js' ) }} type="text/javascript"></script>
+
+  <link href={{ url_for('static', filename='all.css' ) }} media="screen" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class='wrapper'>
+    <div class='header group'>
+      <h1>Spudooli House</h1>
+
+      <!-- warning indicator images could go here -->
+      <ul class='logos group'>
+        <li>
+          <!-- img goes here -->
+          <p id="pisprinkler"></p>
+        </li>
+        <li>
+          <!-- img goes here -->
+          <p id="gardenlights"></p>
+        </li>
+        <li>
+          <!-- img goes here -->
+          <p id="verandahlights"></p>
+        </li>
+        <li>
+          <!-- img goes here -->
+          <p id="osmc"></p>
+        </li>
+        <li>
+          <!-- img goes here -->
+          <p id="gardenshed"></p>
+        </li>
+        <li>
+          <!-- img goes here -->
+          <p id=""></p>
+        </li>
+      </ul>
+
+
+    </div>
+    <ul class='stats group'>
+      <li>
+        <h2>Inside Temp</h2>
+        <p class='stat_val' id='insidenow'></p>
+        <p class='stat_measure' id='insidehighslows'>
+      </li>
+
+      <li>
+        <h2>Outside Temp</h2>
+        <p class='stat_val' id='outsidenow'></p>
+        <p class='stat_measure' id='outsidehighslows'>
+      </li>
+      <li>
+
+        <h2>Power Draw</h2>
+        <p class='stat_val' id='current_power'> </p>
+
+        <p class='stat_measure' id="hotwatercylinder"></p>
+      </li>
+
+      <li>
+        <h2>Bank Balance</h2>
+        <p class='stat_val' id='bankbalance'></p>
+        <p class="stat_measure" id="bankbalancehistory"></p>
+      </li>
+    </ul>
+    <ul class='stats group'>
+
+      <li>
+        <h2>The $100k by 60 Project</h2>
+        <p class='stat_val' id='the100x60project'></p>
+        <p class="stat_measure" id="the100x60weeks"></p>
+
+      </li>
+
+      <li>
+        <h2>Things</h2>
+        <!-- <p class='stat_weather' id='gardenshedtemperature'></p>
+<p class='stat_weather' id='gardenshedhumidity'></p><br> -->
+        <p class='stat_weather' id='simplicity'></p><br>
+        <p class='stat_weather' id='sharesies'></p><br>
+        <p class='stat_weather' id='harmoney'></p>
+        <!-- <div class='audienceBox' id='audienceBox'> 
+</div> -->
+      </li>
+
+      <li>
+        <h2>The Weather</h2>
+        <p class='stat_weather' id='weather'></p>
+      </li>
+
+      <li>
+        <h2>Time</h2>
+        <p class='stat_val' id='current_time'> </p>
+        <p class='stat_measure' id='currentdate'></p><br>
+        <p class='stat_weather' id='thesun'></p>
+      </li>
+
+    </ul>
+
+
+    <ul class='stats group'>
+      <li>
+        <h2>Where is Dave</h2>
+        <p class='stat_val' id='where_is_dave'></p>
+        </p>
+      </li>
+      <li>
+        <h2>Where is Gabba</h2>
+        <p class='stat_val' id='where_is_gabba'></p>
+        </p>
+      </li>
+      <li>
+        <h2>Is it going to rain?</h2>
+        <p class='caffeination_level_3 stat_val' id='rainradar'></p>
+      </li>
+      <li>
+        <h2>Show us the bars</h2>
+        <p class='stat_val' id='isobars'></p>
+      </li>
+    </ul>
+
+
+  </div>
+
+
+  <script>
+    function gettime() {
+      $.get('gettime', function (data) {
+        $('#current_time').text(data);
+      });
+    }
+
+    function getdate() {
+      $.get('getdate', function (data) {
+        $('#currentdate').text(data);
+      });
+    }
+
+    function simplicity() {
+      $.get('simplicity', function (data) {
+        $('#simplicity').html(data);
+
+      });
+    }
+
+
+    function gardenlights() {
+      $.get('', function (data) {
+        $('#gardenlights').html(data);
+      });
+    }
+
+    function verandahlights() {
+      $.get('', function (data) {
+        $('#verandahlights').html(data);
+      });
+    }
+
+    function osmc() {
+      $.get('', function (data) {
+        $('#osmc').html(data);
+      });
+    }
+
+    function gardenshed() {
+      $.get('', function (data) {
+        $('#gardenshed').html(data);
+      });
+    }
+
+    function gardenshedhumidity() {
+      $.get('', function (data) {
+        $('#gardenshedhumidity').html(data);
+      });
+    }
+
+    function gardenshedtemperature() {
+      $.get('', function (data) {
+        $('#gardenshedtemperature').html(data);
+      });
+    }
+
+    function harmoney() {
+      $.get('', function (data) {
+        $('#harmoney').html(data);
+      });
+    }
+
+    function the100x60project() {
+      $.get('the100x60project', function (data) {
+        $('#the100x60project').text(data);
+      });
+    }
+
+    function the100x60weeks() {
+      $.get('', function (data) {
+        $('#the100x60weeks').html(data);
+      });
+    }
+
+    function sharesies() {
+      $.get('', function (data) {
+        $('#sharesies').html(data);
+      });
+    }
+
+    function sharesiesdetail() {
+      $.get('', function (data) {
+        $('#sharesiesdetail').html(data);
+      });
+    }
+
+    function getpower() {
+      $.get('', function (data) {
+        $('#current_power').text(data);
+      });
+    }
+
+    function hotwatercylinder() {
+      $.get('', function (data) {
+        $('#hotwatercylinder').html(data);
+      });
+    }
+
+
+    function getoutsidenow() {
+      $.get('outdoortemperature', function (data) {
+        $('#outsidenow').text(data);
+
+      });
+    }
+
+    function getinsidenow() {
+      $.get('indoortemperature', function (data) {
+        $('#insidenow').html(data);
+
+      });
+    }
+
+    function outsidehighslows() {
+      $.get('outsidehighslows', function (data) {
+        $('#outsidehighslows').html(data);
+
+      });
+    }
+
+    function insidehighslows() {
+      $.get('insidehighslows', function (data) {
+        $('#insidehighslows').html(data);
+
+      });
+    }
+
+
+    function whereisgabba() {
+      $.get('', function (data) {
+        $('#where_is_gabba').html(data);
+
+      });
+    }
+
+    function whereisdave() {
+      $.get('', function (data) {
+        $('#where_is_dave').html(data);
+
+      });
+    }
+
+    function rainradar() {
+      $.get('rainradar', function (data) {
+        $('#rainradar').html(data);
+
+      });
+    }
+
+    function isobars() {
+      $.get('isobars', function (data) {
+        $('#isobars').html(data);
+
+      });
+    }
+
+    function bankbalance() {
+      $.get('', function (data) {
+        $('#bankbalance').html(data);
+
+      });
+    }
+
+    function thesun() {
+      $.get('', function (data) {
+        $('#thesun').html(data);
+
+      });
+    }
+
+    function weather() {
+      $.get('', function (data) {
+        $('#weather').html(data);
+
+      });
+    }
+
+    function broadbandusage() {
+      $.get('', function (data) {
+        $('#broadbandusage').html(data);
+      });
+    }
+
+    function tides() {
+      $.get('', function (data) {
+        $('#tides').html(data);
+      });
+    }
+    function broadbandusagepercent() {
+      $.get('', function (data) {
+        $('#audienceBox').html(data);
+      });
+    }
+
+
+    function bankbalancehistory() {
+      $.get('', function (data) {
+        $('#bankbalancehistory').html(data);
+      });
+    }
+
+
+    function getpowerchartvalue() {
+      $.get('', function (data) {
+        values.set(data);
+        $('#current_power').text(data);
+      });
+    }
+
+    // $(document).ready(function () {
+    //   setInterval(hotwatercylinder, 30150);
+    // });
+
+    $(document).ready(function () {
+      setInterval(gettime, 10000);
+    });
+
+    $(document).ready(function () {
+      setInterval(getdate, 3600000);
+    });
+
+    $(document).ready(function () {
+      setInterval(simplicity, 3600000);
+    });
+
+    // $(document).ready(function () {
+    //   setInterval(gardenlights, 300000);
+    // });
+
+    // $(document).ready(function () {
+    //   setInterval(gardenshed, 300000);
+    // });
+
+    // $(document).ready(function () {
+    //   setInterval(gardenshedhumidity, 300000);
+    // });
+
+    // $(document).ready(function () {
+    //   setInterval(gardenshedtemperature, 300000);
+    // });
+
+    // $(document).ready(function () {
+    //   setInterval(verandahlights, 300000);
+    // });
+
+    // $(document).ready(function () {
+    //   setInterval(osmc, 300000);
+    // });
+
+    // $(document).ready(function () {
+    //   setInterval(sharesies, 600000);
+    // });
+
+    // $(document).ready(function () {
+    //   setInterval(the100x60project, 900000);
+    // });
+
+    // $(document).ready(function () {
+    //   setInterval(the100x60weeks, 900000);
+    // });
+
+    // $(document).ready(function () {
+    //   setInterval(harmoney, 900000);
+    // });
+
+    // $(document).ready(function () {
+    //   setInterval(sharesiesdetail, 600000);
+    // });
+
+    $(document).ready(function () {
+      setInterval(outsidehighslows, 600000);
+    });
+
+    $(document).ready(function () {
+      setInterval(insidehighslows, 601100);
+    });
+
+    // $(document).ready(function () {
+    //   setInterval(whereisgabba, 60000);
+    // });
+
+    // $(document).ready(function () {
+    //   setInterval(whereisdave, 60000);
+    // });
+
+    $(document).ready(function () {
+      setInterval(rainradar, 900000);
+    });
+
+    $(document).ready(function () {
+      setInterval(isobars, 900000);
+    });
+
+    // $(document).ready(function () {
+    //   setInterval(bankbalance, 3600000);
+    // });
+
+    // $(document).ready(function () {
+    //   setInterval(weather, 450000);
+    // });
+
+    // $(document).ready(function () {
+    //   setInterval(thesun, 43200000);
+    // });
+
+    // $(document).ready(function () {
+    //   setInterval(bankbalancehistory, 7200000);
+    // });
+
+    function start() {
+      getinsidenow();
+      getoutsidenow()
+      outsidehighslows();
+      insidehighslows();
+      //weather();
+      //thesun();
+      //whereisgabba();
+      // whereisdave();
+      // bankbalancehistory();
+      simplicity();
+      // sharesies();
+      // sharesiesdetail();
+      // harmoney();
+      gettime();
+      getdate();
+      rainradar();
+      isobars();
+      // bankbalance()
+      the100x60project();
+      // the100x60weeks();
+      // rainrader();
+      //pisprinkler();
+      // gardenlights();
+      // verandahlights();
+      // gardenshed();  
+      // gardenshedhumidity();
+      // gardenshedtemperature();
+      // osmc();
+    }
+
+    window.onload = start;
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,452 @@
+ /*  
+  
+  A Build Conf Product
+  http://buildconf.co
+  
+  Visual Design by Nicholas Felton
+  http://feltron.com/
+  
+  Stats & Drink recording app by Kalv, Jase, Chris & James - Go Free Range
+  http://gofreerange.com
+
+  Made possible by Campaign Monitor
+  http://www.campaignmonitor.com
+
+  Build Conference 2010 - Kick ass!
+
+*/  
+  
+/*
+  Reset styles.
+  Bring it back to earth.
+*/
+  
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	font-size: 100%;
+	/*vertical-align: baseline;*/
+	border: 0;
+	outline: 0;
+	background: transparent;
+}
+	
+ol, ul {
+	list-style: none;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+:focus {
+	outline: 0;
+}
+
+table {
+	border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* General layout */
+
+body {
+  background:#222;
+  color:#fff;
+  font-family: Helvetica, Arial, sans-serif; 
+  margin:0px;
+  padding:0px;
+}
+  
+.wrapper {
+  background:#222;
+  min-width: 840px;
+  padding: 0 60px;
+}
+
+.header {
+  border-bottom: 1px solid #444;
+  position: relative;
+  padding: 0;
+  margin: 0;
+}
+
+.header h1 {
+  color:#ccc;
+  float: left;
+  font-size: 51px;
+  font-weight: bold;
+  line-height: 51px;
+  height: 51px;
+  margin: 25px 0 0 0;
+  padding: 0 0 0 60px;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 0;
+}
+
+ul.logos {
+  float: right;
+  padding-top: 2em;
+}
+ 
+ul.logos li {
+  float: left;
+  padding: 0 0 0 40px;
+}
+ 
+h2 {
+  font-size: 18px;
+  letter-spacing: 1px;
+  padding-bottom: 10px;
+  padding-top:10px;		
+  text-transform: uppercase;
+} 
+ 
+h3 {
+  font-size: 28px;
+  letter-spacing: 1px;
+  padding-bottom: 0px;
+  padding-top:1px;		
+  text-transform: uppercase;
+} 
+
+/* Main stats (blocks of 3) */ 
+ 
+ul.stats {
+  padding-top: 1%;
+}
+
+ul.stats li {
+  width: 21%;
+  float: left;
+  border-left: 1px solid #444;
+  padding-top: 10px;
+  padding-left: 2%;
+  padding-right: 2%;
+  min-height: 14em;
+  overflow: hidden;
+}
+
+ul.stats li:first-child {
+  border: none;
+  padding-left: 0;
+}
+  
+ul.stats li h2 {
+  padding-bottom: 30px;		
+  padding-top: 0;
+}
+
+/* Timeline barchart */
+
+.stat_val {
+  font-family: "LeagueGothicRegular",sans-serif;
+  font-size: 270px;
+  color: #D0E700;
+  letter-spacing: -2px;
+  line-height:220px;
+  text-transform: uppercase;
+  padding: 0;
+  margin: 0;
+}
+
+.stat_measure {
+  font-size: 20px;
+  color: #D0E700;
+  letter-spacing: 1px;
+  line-height:18px;
+  padding-top:10px;
+}
+
+.stat_weather {
+  font-size: 20px;
+  color: #D0E700;
+  letter-spacing: 1px;
+  line-height:18px;
+  padding-top:1px;
+}
+
+.audienceBox {
+  height: 40px;
+  background-color:#333;
+  margin-top:18px;
+}
+
+.audienceGraph {
+  height: 40px;
+  background-color:#D0E700;
+}
+
+.audiencePercent {
+  text-transform: uppercase;
+  font-size: 20px;
+  color:#fff;
+  font-weight:normal;
+  letter-spacing:1px;
+  position: relative;
+  top: 8px;
+  left: 105%;
+}
+
+span.caffeination_level_0 {
+  left: 10px;
+}
+
+span.caffeination_level_1 {
+  left: 110%;
+}
+
+span.caffeination_level_2 {
+  left: 108%;
+}
+
+span.caffeination_level_3 {
+
+}
+
+span.caffeination_level_4 {
+  
+}
+
+span.caffeination_level_5 {
+  left: 10px;
+  color: #333;
+}
+
+span.caffeination_level_6 {
+  left: 10px;
+  color: #333;  
+}
+
+#audience_caffeination_description.caffeination_level_6 {
+  font-size: 100px;
+  line-height: 55px;
+}
+
+ol#drink_timeline {
+  position: relative;
+  padding-bottom: 20px;
+}
+
+ol#drink_timeline li.hour {
+  float: left;
+  position: relative;
+  width: 11%;
+}
+
+li.hour .fifteen_minutes {
+  padding-top: 7em;
+  width: 25%;
+  float: left;
+}
+
+li.hour .fifteen_minutes .five_minutes {
+  float: left;
+  width: 33%;
+}
+
+li.hour h2 {
+  position: absolute;
+  bottom: -29px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  
+  padding-top:10px;
+  color: #aaa;		  
+  font-size: 1em;
+  letter-spacing: 1px;
+  
+  border-top:1px solid #777;
+  border-left:1px solid #777;
+  padding-left:8px;
+}
+
+li.hour:last-child h2 {
+  border-right: 1px solid #777;
+}
+
+
+p.amount_consumed {
+  background: #D0E700;
+  width: 3px;
+  text-indent: -9999px;
+  margin: 0 auto;
+  height: 100px;
+}
+
+p.amount_consumed span {
+  background: #222;
+  display: block;
+  bottom: 0;
+}
+
+h3.session {
+  position: absolute;
+  top: 0;
+  font-size: 0.7em;
+  line-height: 1.3em;
+  color:#bbb;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  max-width: 9em;
+  border-left:1px solid #777;
+  min-height: 9em;
+  padding: 0 4%;
+}
+
+/* 
+
+  Add a sweet typeface 
+
+*/
+
+  @font-face {
+  	font-family: 'LeagueGothicRegular';
+  	src: url('leaguegothic-webfont.eot');
+  	src: local('☺'), url('leaguegothic-webfont.woff') format('woff'), url('leaguegothic-webfont.ttf') format('truetype'), url('leaguegothic-webfont.svg#webfont0rcEv01v') format('svg');
+  	font-weight: normal;
+  	font-style: normal;
+  }
+
+  .HeroicCondensedLight {
+    font-weight: normal;
+    font-style: normal;
+    line-height:normal;
+    font-family: 'LeagueGothicRegular', sans-serif;
+    font-size-adjust: 0.5;
+  }
+
+  .icon1 {
+    float: right;
+  }
+
+/* 
+  
+  Finally, size doesn't matter .. kinda.
+  
+*/
+
+@media only screen and (min-width: 400px) and (max-width: 1920px) {
+   
+  .header h1 {
+    font-size: 2.4em;
+    padding-top: 0.2em;
+  }
+    
+  h2 {
+    font-size: 14px;
+  }
+  
+  p.stat_val {
+    font-size: 180px;
+    line-height: 120px;
+  }
+  
+  p.stat_measure {
+    padding-top: 1.8em;
+    font-size: 16px;
+    line-height: 14px;
+  }
+
+    p.stat_weather {
+    padding-top: em;
+    font-size: 16px;
+    line-height: 18px;
+  }
+  
+  .block_label_alt, .block_label {
+    font-size: 11px;
+  }
+}
+
+/* 
+
+  Drink recorder styles (iphone web-app)
+
+*/
+
+  #drink_recorder {
+    margin: 10% auto;
+    max-width: 430px;
+  }
+
+  #drink_recorder input[type=submit] {
+    border: none;
+    color: #333;
+    width: 100%;
+    font-size: 4.2em;
+    background: #333;
+    color: white;
+    border: 1px solid #333;
+    font-family: "LeagueGothicRegular",sans-serif;
+    line-height: 2em;
+    margin-bottom: 10%;
+    -webkit-tap-highlight-color: rgba(255,216,0,0.5);
+    text-transform: uppercase;
+    border-radius: 1em;
+  }
+
+  #drink_recorder input[type=submit]:active {
+    background-color: #89782e;
+  }
+
+  ul#counts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  ul#counts li {
+    float: left;
+    width: 48%;
+    text-align: center;
+  }
+
+  ul#counts li p {
+    font-family: "LeagueGothicRegular",sans-serif;
+    font-size: 2em;
+    padding: 0;
+    margin: 0;
+    color: #888;
+  }
+
+  ul#counts li p span {
+    color: #fff;
+  }
+
+
+  
+/* self-clear floats */
+
+.group:after {
+	content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+      .glyph {
+        font-size: 16px;
+        float: left;
+        text-align: center;
+        padding: .75em;
+        margin: .75em 1.5em .75em 0;
+        width: 14em;
+        border-radius: .25em;
+      }
+      .fs1 {
+        font-size: 2.5em;
+      }
+      .box1 .climacon{
+        font-size: 2em;
+        /*vertical-align: middle; */
+      }      
+
+/* JASE LOVES YOU ALL */
