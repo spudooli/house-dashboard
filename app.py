@@ -95,8 +95,8 @@ def simplicity():
     html = "<strong>Home Loan:</strong> " +  homeloanbalance + "<br><br><strong>Kiwisaver Dave:</strong> " + simplicityDave + "<br><strong>Kiwisaver Gabba:</strong> " + simplicityGabba + "<br><strong>Punakaiki:</strong> " + punakaikicurrentvalue
     return html
 
-@app.route("/sharsies")
-def sharsies():
+@app.route("/sharesies")
+def sharesies():
     return
     
 
