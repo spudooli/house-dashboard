@@ -50,8 +50,21 @@ def indoorTemperature():
 def bankbalance():
     f = open("/var/www/scripts/otherbalance.txt", "r")    
     bankbalance = f.read()
-    #bankbalance = str(bankbalance)
     html = "$" + bankbalance.split(".")[0]
+    return html
+
+@app.route("/bankbalancehistory")
+def bankbalancehistory():
+    # get the last 75 rows of the bank balance
+    cursor = mysql.connection.cursor()
+    cursor.execute("select amount, date from (SELECT * FROM bankbalance ORDER BY id DESC LIMIT 75)var1 order by date ASC")
+    last75rows = cursor.fetchall()
+    cursor.close()
+    rows = []  
+    for row in last75rows:
+        rows.append(row[0])
+    print(rows)
+    html = "html"
     return html
 
 @app.route("/outdoortemperature")
@@ -121,7 +134,6 @@ def simplicity():
 def sharesies():
     f = open("/var/www/scripts/sharesiesbalance.txt", "r")    
     sharesiesbalance = f.read()
-    #bankbalance = str(bankbalance)
     html = "Sharesies: $" + sharesiesbalance.split(".")[0]
     return html
 

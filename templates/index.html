@@ -10,6 +10,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js" type="text/javascript"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
   <script src={{ url_for('static', filename='mqtt.js' ) }} type="text/javascript"></script>
+  <script src={{ url_for('static', filename='sparkline.js' ) }} type="text/javascript"></script>
 
   <link href={{ url_for('static', filename='all.css' ) }} media="screen" rel="stylesheet" type="text/css" />
 </head>
@@ -314,7 +315,7 @@
     }
 
     function bankbalancehistory() {
-      $.get('', function (data) {
+      $.get('bankbalancehistory', function (data) {
         $('#bankbalancehistory').html(data);
       });
     }
@@ -423,9 +424,9 @@
     //   setInterval(thesun, 43200000);
     // });
 
-    // $(document).ready(function () {
-    //   setInterval(bankbalancehistory, 7200000);
-    // });
+    $(document).ready(function () {
+      setInterval(bankbalancehistory, 7200000);
+    });
 
     function start() {
       getinsidenow();
@@ -436,7 +437,7 @@
       //thesun();
       whereisgabba();
       whereisdave();
-      // bankbalancehistory();
+      bankbalancehistory();
       simplicity();
       // sharesies();
       // sharesiesdetail();
