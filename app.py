@@ -3,10 +3,23 @@ from flask import render_template
 from datetime import datetime as dt
 import string
 import random
+import urllib.request
 import json
+from flask_mysqldb import MySQL
 
 
 app = Flask(__name__)
+
+
+mysql = MySQL()
+
+app.config['MYSQL_HOST'] = '192.168.1.2'
+app.config['MYSQL_USER'] = 'sammy'
+app.config['MYSQL_PASSWORD'] = 'bobthefish'
+app.config['MYSQL_DB'] = 'spudooli'
+
+mysql = MySQL(app)
+
 
 def statusFile(thing):
     jsonFile = open("/var/www/scripts/statusfile.json", "r")
@@ -99,7 +112,118 @@ def simplicity():
 def sharesies():
     return
     
+@app.route("/davelocation")
+def davelocation():
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM `track` where who = 3 ORDER BY `id` DESC limit 1")
+    davelocation = cursor.fetchone()
+    print(davelocation)
+    cursor.close()
+    daveupdated = str(davelocation[1])
+    davelatlon = str(davelocation[3]) + "," + str(davelocation[4])
+    html = "<img src='https://maps.googleapis.com/maps/api/staticmap?center=" + davelatlon + "&zoom=15&size=350x300&markers=color:0xD0E700%7Clabel:D%7C" + davelatlon + "&sensor=false&key=AIzaSyCyuhLhlvQCW7dZBaA5-HLzDP6Sau-qmvA&visual_refresh=true&maptype=terrain'><p class='stat_measure' id='current_date' >Updated:" + daveupdated + "</p>"
+    return html
+    
+@app.route("/gabbalocation")
+def gabbalocation():
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM `track` where who = 4 ORDER BY `id` DESC limit 1")
+    gabbalocation = cursor.fetchone()
+    print(gabbalocation)
+    cursor.close()
+    gabbaupdated = str(gabbalocation[1])
+    gabbalatlon = str(gabbalocation[3]) + "," + str(gabbalocation[4])
+    html = "<img src='https://maps.googleapis.com/maps/api/staticmap?center=" + gabbalatlon + "&zoom=15&size=350x300&markers=color:0xD0E700%7Clabel:G%7C" + gabbalatlon + "&sensor=false&key=AIzaSyCyuhLhlvQCW7dZBaA5-HLzDP6Sau-qmvA&visual_refresh=true&maptype=terrain'><p class='stat_measure' id='current_date' >Updated:" + gabbaupdated + "</p>"
+    return html
 
+@app.route("/weather")
+def weather():
+    thesunurl = "http://metservice.com/publicData/localForecastauckland"
+    openUrl = urllib.request.urlopen(thesunurl)
+    data = openUrl.read()
+    jsonData = json.loads(data)
+
+    todayforecast = jsonData['days'][0]['forecast']
+    #todayforecastword = jsonData['days'][0]['forecastWord']
+    todaymax = jsonData['days'][0]['max']
+    todaymin = jsonData['days'][0]['min']
+
+    tomorrowforecast = jsonData['days'][1]['forecast']
+    #tomorrowforecastword = jsonData['days'][1]['forecastWord']
+    tomorrowmax = jsonData['days'][1]['max']
+    tomorrowmin = jsonData['days'][1]['min']
+
+    saturday = jsonData['saturdayForecastWord']
+    sunday = jsonData['sundayForecastWord']
+
+    if saturday == "Partly cloudy":
+        saturdayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
+    if saturday == "Few showers":
+        saturdayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
+    if saturday == "Showers":
+        saturdayicon = "<span class='fs1 climacon shoers' aria-hidden='true'></span>"
+    if saturday == "Rain":
+        saturdayicon = "<span class='fs1 climacon rain' aria-hidden='true'></span>"
+    if saturday == "Fine":
+        saturdayicon = "<span class='fs1 climacon sun' aria-hidden='true'></span>"
+    if saturday == "Cloudy":
+        saturdayicon = "<span class='fs1 climacon cloud' aria-hidden='true'></span>"
+    if saturday == "Wind rain":
+        saturdayicon = "<span class='fs1 climacon wind cloud' aria-hidden='true'></span>"
+    if saturday == "Drizzle":
+        saturdayicon = "<span class='fs1 climacon drizzle' aria-hidden='true'></span>"
+    if saturday == "Windy":
+        saturdayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
+    if saturday == "Thunder":
+        saturdayicon = "<span class='fs1 climacon thunder' aria-hidden='true'></span>"
+
+    if sunday == "Partly cloudy":
+        sundayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
+    if sunday == "Few showers":
+        sundayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
+    if sunday == "Showers":
+        sundayicon = "<span class='fs1 climacon shoers' aria-hidden='true'></span>"
+    if sunday == "Rain":
+        sundayicon = "<span class='fs1 climacon rain' aria-hidden='true'></span>"
+    if sunday == "Fine":
+        sundayicon = "<span class='fs1 climacon sun' aria-hidden='true'></span>"
+    if sunday == "Cloudy":
+        sundayicon = "<span class='fs1 climacon cloud' aria-hidden='true'></span>"
+    if sunday == "Wind rain":
+        sundayicon = "<span class='fs1 climacon wind cloud' aria-hidden='true'></span>"
+    if sunday == "Drizzle":
+        sundayicon = "<span class='fs1 climacon drizzle' aria-hidden='true'></span>"
+    if sunday == "Windy":
+        sundayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
+    if sunday == "Thunder":
+        sundayicon = "<span class='fs1 climacon thunder' aria-hidden='true'></span>"
+
+    #pressuredirection = statusFile("pressureDirection")
+    pressuredirection = "upslowly"
+    if pressuredirection == "upslowly":
+        pressuredirectionicon= "<i class='material-icons' >arrow_upward</i>"
+    if pressuredirection == "upslowly-goodcoming":
+        pressuredirectionicon= "<i class='material-icons' >arrow_upward</i>"
+    if pressuredirection == "downslowly":
+        pressuredirectionicon= "<i class='material-icons' >arrow_downward</i>"
+    if pressuredirection == "downslowly-nogoodcoming":
+        pressuredirectionicon= "<i class='material-icons' >arrow_downward</i>"
+    if pressuredirection == "stable":
+        pressuredirectionicon= "<i class='material-icons' >arrow_forward</i>"
+
+    #indoorPressure = statusFile("indoorPressure")
+    indoorPressure = "1000"
+
+    html = todayforecast + "<br>"
+    html += "Max: " + todaymax + "&deg;  Min: " + todaymin + "&deg;<br><br>"
+    html += "<strong>Tomorrow</strong> &nbsp; &nbsp; &nbsp; Max: " +  tomorrowmax + "&deg;  Min: " + tomorrowmin + "&deg;<br>"
+    html +=  tomorrowforecast + "<br>"
+    html += "<br><table width=100%><tr><th>Pressure</th><th>Saturday</th><th>Sunday</th></tr>"
+    html += "<tr><td><h3>" + indoorPressure + pressuredirectionicon + "</h3></td>"
+    html += "<td>" + saturdayicon + "</td>"
+    html += "<td>" + sundayicon + "</td></tr></table>"
+
+    return html
 
 if __name__ == "__main__":
     app.run()

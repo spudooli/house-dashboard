@@ -265,14 +265,14 @@
 
 
     function whereisgabba() {
-      $.get('', function (data) {
+      $.get('gabbalocation', function (data) {
         $('#where_is_gabba').html(data);
 
       });
     }
 
     function whereisdave() {
-      $.get('', function (data) {
+      $.get('/davelocation', function (data) {
         $('#where_is_dave').html(data);
 
       });
@@ -307,7 +307,7 @@
     }
 
     function weather() {
-      $.get('', function (data) {
+      $.get('weather', function (data) {
         $('#weather').html(data);
 
       });
@@ -413,13 +413,13 @@
       setInterval(insidehighslows, 601100);
     });
 
-    // $(document).ready(function () {
-    //   setInterval(whereisgabba, 60000);
-    // });
+    $(document).ready(function () {
+      setInterval(whereisgabba, 60000);
+    });
 
-    // $(document).ready(function () {
-    //   setInterval(whereisdave, 60000);
-    // });
+    $(document).ready(function () {
+      setInterval(whereisdave, 60000);
+    });
 
     $(document).ready(function () {
       setInterval(rainradar, 900000);
@@ -433,9 +433,9 @@
     //   setInterval(bankbalance, 3600000);
     // });
 
-    // $(document).ready(function () {
-    //   setInterval(weather, 450000);
-    // });
+    $(document).ready(function () {
+      setInterval(weather, 4500000);
+    });
 
     // $(document).ready(function () {
     //   setInterval(thesun, 43200000);
@@ -450,10 +450,10 @@
       getoutsidenow()
       outsidehighslows();
       insidehighslows();
-      //weather();
+      weather();
       //thesun();
-      //whereisgabba();
-      // whereisdave();
+      whereisgabba();
+      whereisdave();
       // bankbalancehistory();
       simplicity();
       // sharesies();
