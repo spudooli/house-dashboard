@@ -6,6 +6,7 @@ import random
 import urllib.request
 import json
 from flask_mysqldb import MySQL
+import config
 
 
 app = Flask(__name__)
@@ -121,7 +122,7 @@ def davelocation():
     cursor.close()
     daveupdated = str(davelocation[1])
     davelatlon = str(davelocation[3]) + "," + str(davelocation[4])
-    html = "<img src='https://maps.googleapis.com/maps/api/staticmap?center=" + davelatlon + "&zoom=15&size=350x300&markers=color:0xD0E700%7Clabel:D%7C" + davelatlon + "&sensor=false&key=AIzaSyCyuhLhlvQCW7dZBaA5-HLzDP6Sau-qmvA&visual_refresh=true&maptype=terrain'><p class='stat_measure' id='current_date' >Updated:" + daveupdated + "</p>"
+    html = "<img src='https://maps.googleapis.com/maps/api/staticmap?center=" + davelatlon + "&zoom=15&size=350x300&markers=color:0xD0E700%7Clabel:D%7C" + davelatlon + "&sensor=false&key=" + config.googlemapsapikey + "&visual_refresh=true&maptype=terrain'><p class='stat_measure' id='current_date' >Updated:" + daveupdated + "</p>"
     return html
     
 @app.route("/gabbalocation")
@@ -133,7 +134,7 @@ def gabbalocation():
     cursor.close()
     gabbaupdated = str(gabbalocation[1])
     gabbalatlon = str(gabbalocation[3]) + "," + str(gabbalocation[4])
-    html = "<img src='https://maps.googleapis.com/maps/api/staticmap?center=" + gabbalatlon + "&zoom=15&size=350x300&markers=color:0xD0E700%7Clabel:G%7C" + gabbalatlon + "&sensor=false&key=AIzaSyCyuhLhlvQCW7dZBaA5-HLzDP6Sau-qmvA&visual_refresh=true&maptype=terrain'><p class='stat_measure' id='current_date' >Updated:" + gabbaupdated + "</p>"
+    html = "<img src='https://maps.googleapis.com/maps/api/staticmap?center=" + gabbalatlon + "&zoom=15&size=350x300&markers=color:0xD0E700%7Clabel:G%7C" + gabbalatlon + "&sensor=false&key=" + config.googlemapsapikey + "&visual_refresh=true&maptype=terrain'><p class='stat_measure' id='current_date' >Updated:" + gabbaupdated + "</p>"
     return html
 
 @app.route("/weather")
