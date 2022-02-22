@@ -46,6 +46,14 @@ def indoorTemperature():
     indoortemp = statusFile("indoorTemperature") + "&deg;"
     return indoortemp
 
+@app.route("/bankbalance")
+def bankbalance():
+    f = open("/var/www/scripts/otherbalance.txt", "r")    
+    bankbalance = f.read()
+    #bankbalance = str(bankbalance)
+    html = "$" + bankbalance.split(".")[0]
+    return html
+
 @app.route("/outdoortemperature")
 def outdoorTemperature():
     outdoortemp = statusFile("outdoorTemperature") + "&deg;"
@@ -111,8 +119,12 @@ def simplicity():
 
 @app.route("/sharesies")
 def sharesies():
-    return
-    
+    f = open("/var/www/scripts/sharesiesbalance.txt", "r")    
+    sharesiesbalance = f.read()
+    #bankbalance = str(bankbalance)
+    html = "Sharesies: $" + sharesiesbalance.split(".")[0]
+    return html
+
 @app.route("/davelocation")
 def davelocation():
     cursor = mysql.connection.cursor()
