@@ -23,10 +23,6 @@
       <ul class='logos group'>
         <li>
           <!-- img goes here -->
-          <p id="pisprinkler"></p>
-        </li>
-        <li>
-          <!-- img goes here -->
           <p id="gardenlights"></p>
         </li>
         <li>
@@ -300,7 +296,7 @@
     }
 
     function thesun() {
-      $.get('', function (data) {
+      $.get('thesun', function (data) {
         $('#thesun').html(data);
 
       });
@@ -419,9 +415,9 @@
       setInterval(weather, 4500000);
     });
 
-    // $(document).ready(function () {
-    //   setInterval(thesun, 43200000);
-    // });
+    $(document).ready(function () {
+      setInterval(thesun, 43200000);
+    });
 
     $(document).ready(function () {
       setInterval(bankbalancehistory, 7200000);
@@ -433,7 +429,6 @@
       outsidehighslows();
       insidehighslows();
       weather();
-      //thesun();
       whereisgabba();
       whereisdave();
       bankbalancehistory();
@@ -449,7 +444,6 @@
       the100x60project();
       // the100x60weeks();
       // rainrader();
-      //pisprinkler();
       // gardenlights();
       // verandahlights();
       // gardenshed();  

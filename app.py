@@ -122,8 +122,12 @@ def isobars():
 
 @app.route("/thesun")
 def thesun():
-    sunrise = statusFile("sunrise")
-    sunset = statusFile("sunset")
+    thesunurl = "http://metservice.com/publicData/localForecastauckland"
+    openUrl = urllib.request.urlopen(thesunurl)
+    data = openUrl.read()
+    jsonData = json.loads(data)
+    sunrise = jsonData['days'][0]['riseSet']['sunRise']
+    sunset = jsonData['days'][0]['riseSet']['sunSet']
     html = "<span><strong>The Sun: </strong> " + sunrise + " and " + sunset
     return html
 
@@ -140,7 +144,7 @@ def simplicity():
 def sharesies():
     f = open("/var/www/scripts/sharesiesbalance.txt", "r")    
     sharesiesbalance = f.read()
-    html = "Sharesies: $" + sharesiesbalance.split(".")[0]
+    html = "<strong>Sharesies:</strong> $" + sharesiesbalance.split(".")[0]
     return html
 
 @app.route("/harmoney")
