@@ -62,9 +62,15 @@ def bankbalancehistory():
     cursor.close()
     rows = []  
     for row in last75rows:
-        rows.append(row[0])
-    print(rows)
-    html = "html"
+        rows.append(str(row[0]))
+    balancehistorylist = ','.join(rows)
+    html = "<span class='bankbalancehistory'>" + balancehistorylist
+    html += "</span><script type='text/javascript'>"
+    html += "$(function() {"
+    html += "$('.inlinesparkline').sparkline();"
+    html += "$('.bankbalancehistory').sparkline('html', {type: 'bar', barColor: '#D0E700'} );"
+    html += "});"
+    html += "</script>"
     return html
 
 @app.route("/outdoortemperature")
@@ -105,13 +111,13 @@ def the100x60project():
 @app.route("/rainradar")
 def rainradar():
     letters = string.ascii_lowercase
-    rainradar = "<img src='https://www.spudooli.com/dashboard/radar.gif?v=" + ''.join(random.choice(letters) for i in range(10)) + "' height='300' width='300' align=left>"
+    rainradar = "<img src='/static/radar.gif' height='300' width='300' align=left>"
     return rainradar
 
 @app.route("/isobars")
 def isobars():
     letters = string.ascii_lowercase
-    isobars = "<img src='https://www.spudooli.com/dashboard/isobars.jpeg?v=" + ''.join(random.choice(letters) for i in range(10)) + "' width='400' align='left'>"
+    isobars = "<img src='/static/isobars.jpeg' width='400' align='left'>"
     return isobars
 
 @app.route("/thesun")
@@ -136,6 +142,13 @@ def sharesies():
     sharesiesbalance = f.read()
     html = "Sharesies: $" + sharesiesbalance.split(".")[0]
     return html
+
+@app.route("/harmoney")
+def harmoney():
+    f = open("/var/www/scripts/harmoneybalance.txt", "r")    
+    harmoneystring = f.read()
+    html = "<strong>Harmoney:</strong> " + harmoneystring.split(":")[1] + " at " + harmoneystring.split(":")[2] + " with " + harmoneystring.split(":")[0] + " funds available"
+    return html 
 
 @app.route("/davelocation")
 def davelocation():
