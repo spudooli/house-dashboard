@@ -2,7 +2,7 @@ from flask import Flask
 from flask import render_template
 from datetime import datetime as dt
 import string
-import random
+import uuid
 import urllib.request
 import json
 from flask_mysqldb import MySQL
@@ -102,6 +102,16 @@ def getdate():
     getdate = custom_strftime('%A the {S}', dt.now())
     return getdate
 
+@app.route("/hotwatercylinder")
+def hotwater():
+    hotwater = statusFile("hotwater")
+    print(hotwater)
+    if hotwater == "0":
+        html = "" 
+    else:
+        html =  "The hot water cylinder is heating"
+    return html
+
 @app.route("/the100x60project")
 def the100x60project():
     the100x60project = int(statusFile("total100x60").split(".")[0])
@@ -111,13 +121,13 @@ def the100x60project():
 @app.route("/rainradar")
 def rainradar():
     letters = string.ascii_lowercase
-    rainradar = "<img src='/static/radar.gif' height='300' width='300' align=left>"
+    rainradar = "<img src='/static/radar.gif?v=" + str(uuid.uuid4()) + "' height='300' width='300' align=left>"
     return rainradar
 
 @app.route("/isobars")
 def isobars():
     letters = string.ascii_lowercase
-    isobars = "<img src='/static/isobars.jpeg' width='400' align='left'>"
+    isobars = "<img src='/static/isobars.jpeg?v=" + str(uuid.uuid4()) + "' width='400' align='left'>"
     return isobars
 
 @app.route("/thesun")
@@ -136,22 +146,26 @@ def simplicity():
     simplicityDave = statusFile("simplicityDave")
     simplicityGabba = statusFile("simplicityGabba")
     homeloanbalance = statusFile("homeloanbalance")
-    punakaikicurrentvalue = "$8,122"
+    punakaikicurrentvalue = "$8,179"
     html = "<strong>Home Loan:</strong> " +  homeloanbalance + "<br><br><strong>Kiwisaver Dave:</strong> " + simplicityDave + "<br><strong>Kiwisaver Gabba:</strong> " + simplicityGabba + "<br><strong>Punakaiki:</strong> " + punakaikicurrentvalue
     return html
 
 @app.route("/sharesies")
 def sharesies():
     f = open("/var/www/scripts/sharesiesbalance.txt", "r")    
-    sharesiesbalance = f.read()
-    html = "<strong>Sharesies:</strong> $" + sharesiesbalance.split(".")[0]
+    sharesiesbalance = int(f.read())
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT id, amount FROM `sharesies` order by`id` DESC limit 1")
+    yesterdaysbalance = cursor.fetchone()
+    change = sharesiesbalance - yesterdaysbalance[1]
+    cursor.close()
+    html = "<strong>Sharesies:</strong> $" + str("{:,}".format(sharesiesbalance)) + "</br> Change today - $" + str(change)
     return html
 
 @app.route("/harmoney")
 def harmoney():
-    f = open("/var/www/scripts/harmoneybalance.txt", "r")    
-    harmoneystring = f.read()
-    html = "<strong>Harmoney:</strong> " + harmoneystring.split(":")[1] + " at " + harmoneystring.split(":")[2] + " with " + harmoneystring.split(":")[0] + " funds available"
+    harmoneystring = statusFile("harmoney")
+    html = "<strong>Harmoney:</strong> " + harmoneystring.split(":")[1] + " at " + harmoneystring.split(":")[2] + " </br> Funds available -" + harmoneystring.split(":")[0]
     return html 
 
 @app.route("/davelocation")
@@ -241,7 +255,7 @@ def weather():
         sundayicon = "<span class='fs1 climacon thunder' aria-hidden='true'></span>"
 
     #pressuredirection = statusFile("pressureDirection")
-    pressuredirection = "upslowly"
+    pressuredirection = statusFile("pressureDirection")
     if pressuredirection == "upslowly":
         pressuredirectionicon= "<i class='material-icons' >arrow_upward</i>"
     if pressuredirection == "upslowly-goodcoming":
@@ -254,7 +268,8 @@ def weather():
         pressuredirectionicon= "<i class='material-icons' >arrow_forward</i>"
 
     #indoorPressure = statusFile("indoorPressure")
-    indoorPressure = "1000"
+    indoorPressure = statusFile("indoorPressure")
+    indoorPressure = indoorPressure[0:4]
 
     html = todayforecast + "<br>"
     html += "Max: " + todaymax + "&deg;  Min: " + todaymin + "&deg;<br><br>"
