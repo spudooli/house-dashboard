@@ -212,12 +212,6 @@
       });
     }
 
-    function sharesiesdetail() {
-      $.get('', function (data) {
-        $('#sharesiesdetail').html(data);
-      });
-    }
-
     function getpower() {
       $.get('', function (data) {
         $('#current_power').text(data);
@@ -363,9 +357,9 @@
     //   setInterval(osmc, 300000);
     // });
 
-    // $(document).ready(function () {
-    //   setInterval(sharesies, 600000);
-    // });
+    $(document).ready(function () {
+      setInterval(sharesies, 600000);
+    });
 
     // $(document).ready(function () {
     //   setInterval(the100x60project, 900000);
@@ -377,10 +371,6 @@
 
     $(document).ready(function () {
       setInterval(harmoney, 900000);
-    });
-
-    $(document).ready(function () {
-      setInterval(sharesiesdetail, 600000);
     });
 
     $(document).ready(function () {
@@ -434,7 +424,6 @@
       bankbalancehistory();
       simplicity();
       sharesies();
-      // sharesiesdetail();
       harmoney();
       gettime();
       getdate();
