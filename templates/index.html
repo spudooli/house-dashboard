@@ -82,8 +82,6 @@
 
       <li>
         <h2>Things</h2>
-        <!-- <p class='stat_weather' id='gardenshedtemperature'></p>
-<p class='stat_weather' id='gardenshedhumidity'></p><br> -->
         <p class='stat_weather' id='simplicity'></p><br>
         <p class='stat_weather' id='sharesies'></p><br>
         <p class='stat_weather' id='harmoney'></p>
@@ -153,38 +151,26 @@
 
 
     function gardenlights() {
-      $.get('', function (data) {
+      $.get('gardenlights', function (data) {
         $('#gardenlights').html(data);
       });
     }
 
     function verandahlights() {
-      $.get('', function (data) {
+      $.get('verandahlights', function (data) {
         $('#verandahlights').html(data);
       });
     }
 
     function osmc() {
-      $.get('', function (data) {
+      $.get('osmc', function (data) {
         $('#osmc').html(data);
       });
     }
 
     function gardenshed() {
-      $.get('', function (data) {
+      $.get('gardenshed', function (data) {
         $('#gardenshed').html(data);
-      });
-    }
-
-    function gardenshedhumidity() {
-      $.get('', function (data) {
-        $('#gardenshedhumidity').html(data);
-      });
-    }
-
-    function gardenshedtemperature() {
-      $.get('', function (data) {
-        $('#gardenshedtemperature').html(data);
       });
     }
 
@@ -333,37 +319,29 @@
       setInterval(simplicity, 3600000);
     });
 
-    // $(document).ready(function () {
-    //   setInterval(gardenlights, 300000);
-    // });
+    $(document).ready(function () {
+      setInterval(gardenlights, 300000);
+    });
 
-    // $(document).ready(function () {
-    //   setInterval(gardenshed, 300000);
-    // });
+    $(document).ready(function () {
+      setInterval(gardenshed, 300000);
+    });
 
-    // $(document).ready(function () {
-    //   setInterval(gardenshedhumidity, 300000);
-    // });
+    $(document).ready(function () {
+      setInterval(verandahlights, 300000);
+    });
 
-    // $(document).ready(function () {
-    //   setInterval(gardenshedtemperature, 300000);
-    // });
-
-    // $(document).ready(function () {
-    //   setInterval(verandahlights, 300000);
-    // });
-
-    // $(document).ready(function () {
-    //   setInterval(osmc, 300000);
-    // });
+    $(document).ready(function () {
+      setInterval(osmc, 300000);
+    });
 
     $(document).ready(function () {
       setInterval(sharesies, 600000);
     });
 
-    // $(document).ready(function () {
-    //   setInterval(the100x60project, 900000);
-    // });
+    $(document).ready(function () {
+      setInterval(the100x60project, 900000);
+    });
 
     // $(document).ready(function () {
     //   setInterval(the100x60weeks, 900000);
@@ -432,13 +410,10 @@
       bankbalance()
       the100x60project();
       // the100x60weeks();
-      // rainrader();
-      // gardenlights();
-      // verandahlights();
-      // gardenshed();  
-      // gardenshedhumidity();
-      // gardenshedtemperature();
-      // osmc();
+      gardenlights();
+      gardenshed();
+      verandahlights();
+      osmc();
     }
 
     window.onload = start;

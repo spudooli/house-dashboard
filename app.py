@@ -7,6 +7,7 @@ import urllib.request
 import json
 from flask_mysqldb import MySQL
 import config
+import socket
 
 
 app = Flask(__name__)
@@ -159,13 +160,54 @@ def sharesies():
     yesterdaysbalance = cursor.fetchone()
     change = sharesiesbalance - yesterdaysbalance[1]
     cursor.close()
-    html = "<strong>Sharesies:</strong> $" + str("{:,}".format(sharesiesbalance)) + "</br> Change today - $" + str(change)
+    html = "<strong>Sharesies:</strong> $" + str("{:,}".format(sharesiesbalance)) + "</br> Change today: $" + str(change)
     return html
 
 @app.route("/harmoney")
 def harmoney():
     harmoneystring = statusFile("harmoney")
-    html = "<strong>Harmoney:</strong> " + harmoneystring.split(":")[1] + " at " + harmoneystring.split(":")[2] + " </br> Funds available -" + harmoneystring.split(":")[0]
+    html = "<strong>Harmoney:</strong> " + harmoneystring.split(":")[1] + " at " + harmoneystring.split(":")[2] + " </br> Funds available: " + harmoneystring.split(":")[0]
+    return html 
+
+@app.route("/gardenlights")
+def gardenlights():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    result = sock.connect_ex(('192.168.1.147', 80))
+    if result == 0:
+        html = ""
+    else:
+        html = "<i class='material-icons' style='font-size:20px;color:red'>error</i> Garden Lights"
+    return html 
+
+@app.route("/verandahlights")
+def verandahlights():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    result = sock.connect_ex(('192.168.1.150', 80))
+    if result == 0:
+        html = ""
+    else:
+        html = "<i class='material-icons' style='font-size:20px;color:red'>error</i> Verandah Lights"
+    return html 
+
+@app.route("/gardenshed")
+def gardenshed():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    result = sock.connect_ex(('192.168.1.129', 80))
+    if result == 0:
+        html = ""
+    else:
+        html = ""
+        #html = "<i class='material-icons' style='font-size:20px;color:red'>error</i> Garden Shed"
+    return html 
+
+@app.route("/osmc")
+def osmc():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    result = sock.connect_ex(('192.168.1.65', 22))
+    if result == 0:
+        html = ""
+    else:
+        html = "<i class='material-icons' style='font-size:20px;color:red'>error</i> OSMC"
     return html 
 
 @app.route("/davelocation")
