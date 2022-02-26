@@ -8,6 +8,7 @@ import json
 from flask_mysqldb import MySQL
 import config
 import socket
+import paho.mqtt.client as paho
 
 
 app = Flask(__name__)
@@ -106,7 +107,6 @@ def getdate():
 @app.route("/hotwatercylinder")
 def hotwater():
     hotwater = statusFile("hotwater")
-    print(hotwater)
     if hotwater == "0":
         html = "" 
     else:
@@ -147,8 +147,36 @@ def simplicity():
     simplicityDave = statusFile("simplicityDave")
     simplicityGabba = statusFile("simplicityGabba")
     homeloanbalance = statusFile("homeloanbalance")
-    punakaikicurrentvalue = "$8,179"
-    html = "<strong>Home Loan:</strong> " +  homeloanbalance + "<br><br><strong>Kiwisaver Dave:</strong> " + simplicityDave + "<br><strong>Kiwisaver Gabba:</strong> " + simplicityGabba + "<br><strong>Punakaiki:</strong> " + punakaikicurrentvalue
+    punakaikicurrentvalue = "8179"
+
+    html = "<strong>Home Loan:</strong> " +  homeloanbalance + "<br><br><strong>Kiwisaver Dave:</strong> " + simplicityDave + "<br><strong>Kiwisaver Gabba:</strong> " + simplicityGabba + "<br><strong>Punakaiki:</strong> $" + punakaikicurrentvalue
+
+    # Calculate the100x60project balance here only because I have most of the values needed already
+    f = open("/var/www/scripts/sharesiesbalance.txt", "r")    
+    sharesiesbalance = int(f.read())
+    harmoneystring = statusFile("harmoney")
+    harmoneystring = harmoneystring.split(":")[1].replace(",", "").replace("$", "")
+    harmoneystring = harmoneystring.split(".")[0]
+    simplicityDave = simplicityDave.replace(",", "").replace("$", "")
+    simplicityGabba = simplicityGabba.replace(",", "").replace("$", "")
+    # TODO: Net Worth needs home loan and house valued added 
+    totalsavings = int(simplicityDave) + int(simplicityGabba) + int(harmoneystring) + int(punakaikicurrentvalue) + int(sharesiesbalance) 
+    networth = int(simplicityDave) + int(simplicityGabba) + int(harmoneystring) + int(punakaikicurrentvalue) + int(sharesiesbalance) + int(1200000) - int(283600)
+    the100x60projectbalance = int(harmoneystring) + int(punakaikicurrentvalue) + int(sharesiesbalance)
+
+    broker = "192.168.1.2"
+    port = 1883
+    client1 = paho.Client("dashboardthe100x60project")
+    client1.connect(broker, port)
+
+    def on_connect(client, userdata, flags, rc):
+        print("Connected With Result Code "+rc)
+
+    client1.publish("house/money/total100x60", the100x60projectbalance)
+    client1.publish("house/money/networth", networth)
+    client1.publish("house/money/networth", totalsavings)
+    client1.disconnect
+
     return html
 
 @app.route("/sharesies")
@@ -215,7 +243,6 @@ def davelocation():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM `track` where who = 3 ORDER BY `id` DESC limit 1")
     davelocation = cursor.fetchone()
-    print(davelocation)
     cursor.close()
     daveupdated = str(davelocation[1])
     davelatlon = str(davelocation[3]) + "," + str(davelocation[4])
@@ -227,7 +254,6 @@ def gabbalocation():
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM `track` where who = 4 ORDER BY `id` DESC limit 1")
     gabbalocation = cursor.fetchone()
-    print(gabbalocation)
     cursor.close()
     gabbaupdated = str(gabbalocation[1])
     gabbalatlon = str(gabbalocation[3]) + "," + str(gabbalocation[4])
