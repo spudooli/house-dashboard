@@ -187,7 +187,7 @@
     }
 
     function the100x60weeks() {
-      $.get('', function (data) {
+      $.get('the100x60weeks', function (data) {
         $('#the100x60weeks').html(data);
       });
     }
@@ -343,9 +343,9 @@
       setInterval(the100x60project, 900000);
     });
 
-    // $(document).ready(function () {
-    //   setInterval(the100x60weeks, 900000);
-    // });
+    $(document).ready(function () {
+      setInterval(the100x60weeks, 900000);
+    });
 
     $(document).ready(function () {
       setInterval(harmoney, 900000);
@@ -409,7 +409,7 @@
       isobars();
       bankbalance()
       the100x60project();
-      // the100x60weeks();
+      the100x60weeks();
       gardenlights();
       gardenshed();
       verandahlights();

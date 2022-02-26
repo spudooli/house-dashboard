@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template
 from datetime import datetime as dt
+from datetime import date
 import string
 import uuid
 import urllib.request
@@ -119,6 +120,18 @@ def the100x60project():
     the100x60project = "$" + f'{the100x60project:,}'
     return the100x60project
 
+@app.route("/the100x60weeks")
+def the100x60weeks():
+    d1 = date.today()
+    d2 = date(2027,11,17)
+    weeks = (d2-d1).days//7
+    the100x60project = int(statusFile("total100x60").split(".")[0])
+    averageperweektogo = int("100000") - int(the100x60project)
+    averageperweektogo = int(averageperweektogo) / weeks
+    averageperweektogo = str(averageperweektogo)
+    html = "Average required per week: $" + averageperweektogo.split(".")[0]
+    return html
+
 @app.route("/rainradar")
 def rainradar():
     letters = string.ascii_lowercase
@@ -174,7 +187,7 @@ def simplicity():
 
     client1.publish("house/money/total100x60", the100x60projectbalance)
     client1.publish("house/money/networth", networth)
-    client1.publish("house/money/networth", totalsavings)
+    client1.publish("house/money/totalsavings", totalsavings)
     client1.disconnect
 
     return html
