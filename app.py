@@ -162,7 +162,7 @@ def simplicity():
     homeloanbalance = statusFile("homeloanbalance")
     punakaikicurrentvalue = "8179"
 
-    html = "<strong>Home Loan:</strong> " +  homeloanbalance + "<br><br><strong>Kiwisaver Dave:</strong> " + simplicityDave + "<br><strong>Kiwisaver Gabba:</strong> " + simplicityGabba + "<br><strong>Punakaiki:</strong> $" + punakaikicurrentvalue
+    html = "<strong>Home Loan:</strong> " +  homeloanbalance + "<br><br><strong>Kiwisaver Dave:</strong> " + simplicityDave + "<br><strong>Kiwisaver Gabba:</strong> " + simplicityGabba + "<br><strong>Punakaiki:</strong> $" + "8,122"
 
     # Calculate the100x60project balance here only because I have most of the values needed already
     f = open("/var/www/scripts/sharesiesbalance.txt", "r")    
@@ -174,7 +174,7 @@ def simplicity():
     simplicityGabba = simplicityGabba.replace(",", "").replace("$", "")
     # TODO: Net Worth needs home loan and house valued added 
     totalsavings = int(simplicityDave) + int(simplicityGabba) + int(harmoneystring) + int(punakaikicurrentvalue) + int(sharesiesbalance) 
-    networth = int(simplicityDave) + int(simplicityGabba) + int(harmoneystring) + int(punakaikicurrentvalue) + int(sharesiesbalance) + int(1200000) - int(283600)
+    networth = int(totalsavings) + int(1200000) - int(283600)
     the100x60projectbalance = int(harmoneystring) + int(punakaikicurrentvalue) + int(sharesiesbalance)
 
     broker = "192.168.1.2"
@@ -201,13 +201,13 @@ def sharesies():
     yesterdaysbalance = cursor.fetchone()
     change = sharesiesbalance - yesterdaysbalance[1]
     cursor.close()
-    html = "<strong>Sharesies:</strong> $" + str("{:,}".format(sharesiesbalance)) + "</br> Change today: $" + str(change)
+    html = "<strong>Sharesies:</strong> $" + str("{:,}".format(sharesiesbalance)) + "</br> Change today: $" + str(change).split(".")[0]
     return html
 
 @app.route("/harmoney")
 def harmoney():
     harmoneystring = statusFile("harmoney")
-    html = "<strong>Harmoney:</strong> " + harmoneystring.split(":")[1] + " at " + harmoneystring.split(":")[2] + " </br> Funds available: " + harmoneystring.split(":")[0]
+    html = "<strong>Harmoney:</strong> " + harmoneystring.split(":")[1] + " at " + harmoneystring.split(":")[2] + " </br> Funds available: " + harmoneystring.split(":")[0].split(".")[0]
     return html 
 
 @app.route("/gardenlights")
