@@ -298,7 +298,7 @@ def weather():
     if saturday == "Few showers":
         saturdayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
     if saturday == "Showers":
-        saturdayicon = "<span class='fs1 climacon shoers' aria-hidden='true'></span>"
+        saturdayicon = "<span class='fs1 climacon showers' aria-hidden='true'></span>"
     if saturday == "Rain":
         saturdayicon = "<span class='fs1 climacon rain' aria-hidden='true'></span>"
     if saturday == "Fine":
@@ -319,7 +319,7 @@ def weather():
     if sunday == "Few showers":
         sundayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
     if sunday == "Showers":
-        sundayicon = "<span class='fs1 climacon shoers' aria-hidden='true'></span>"
+        sundayicon = "<span class='fs1 climacon showers' aria-hidden='true'></span>"
     if sunday == "Rain":
         sundayicon = "<span class='fs1 climacon rain' aria-hidden='true'></span>"
     if sunday == "Fine":
