@@ -134,13 +134,11 @@ def the100x60weeks():
 
 @app.route("/rainradar")
 def rainradar():
-    letters = string.ascii_lowercase
     rainradar = "<img src='/static/radar.gif?v=" + str(uuid.uuid4()) + "' height='300' width='300' align=left>"
     return rainradar
 
 @app.route("/isobars")
 def isobars():
-    letters = string.ascii_lowercase
     isobars = "<img src='/static/isobars.jpeg?v=" + str(uuid.uuid4()) + "' width='400' align='left'>"
     return isobars
 
@@ -153,6 +151,19 @@ def thesun():
     sunrise = jsonData['days'][0]['riseSet']['sunRise']
     sunset = jsonData['days'][0]['riseSet']['sunSet']
     html = "<span><strong>The Sun: </strong> " + sunrise + " and " + sunset
+    
+    broker = "192.168.1.2"
+    port = 1883
+    client1 = paho.Client("dashboardthe100x60project")
+    client1.connect(broker, port)
+
+    def on_connect(client, userdata, flags, rc):
+        print("Connected With Result Code "+rc)
+
+    client1.publish("house/outside/sunset", sunset)
+    client1.publish("house/outside/sunrise", sunrise)
+    client1.disconnect
+
     return html
 
 @app.route("/simplicity")
