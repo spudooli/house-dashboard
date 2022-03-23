@@ -361,7 +361,7 @@ def weather():
 
     #indoorPressure = statusFile("indoorPressure")
     indoorPressure = statusFile("indoorPressure")
-    indoorPressure = indoorPressure[0:4]
+    indoorPressure = indoorPressure[0:-2]
 
     html = todayforecast + "<br>"
     html += "Max: " + todaymax + "&deg;  Min: " + todaymin + "&deg;<br><br>"
