@@ -129,7 +129,8 @@ def the100x60weeks():
     averageperweektogo = int("100000") - int(the100x60project)
     averageperweektogo = int(averageperweektogo) / weeks
     averageperweektogo = str(averageperweektogo)
-    html = "Average required per week: $" + averageperweektogo.split(".")[0]
+    totalsavings = int(statusFile("totalsavings"))
+    html = "Average required per week: $" + averageperweektogo.split(".")[0] + "<br /> <br />Total Retirement Savings: $" + "{:,}".format(totalsavings)
     return html
 
 @app.route("/rainradar")
