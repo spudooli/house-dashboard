@@ -44,7 +44,7 @@ function onMessageArrived(message) {
     }
 
     if (message.destinationName == "house/money/otherbalance") {
-        document.getElementById("bankbalance").innerHTML = message.payloadString.split(".")[0];
+        document.getElementById("bankbalance").innerHTML = "$" + message.payloadString.split(".")[0];
     }
 
     if (message.destinationName == "house/money/homeloanbalance") {
