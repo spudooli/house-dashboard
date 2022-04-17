@@ -107,11 +107,25 @@ def getdate():
 
 @app.route("/hotwatercylinder")
 def hotwater():
-    hotwater = statusFile("hotwater")
+    f = open("/var/www/scripts/power.txt", "r")    
+    power = f.read()
+    hotwater = power.split(",")[1]
     if hotwater == "0":
         html = "" 
     else:
         html =  "The hot water cylinder is heating"
+    return html
+
+@app.route("/spapoolheating")
+def spapoolheating():
+    jsonFile = open("/var/www/scripts/spa-operations.json", "r")
+    data2 = json.load(jsonFile)
+    jsonFile.close()
+    spaHeating = data2["Heating"]
+    if spaHeating == 1:
+        html = "The spa is heating"
+    else:
+        html = ""   
     return html
 
 @app.route("/the100x60project")

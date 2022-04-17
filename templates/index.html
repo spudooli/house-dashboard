@@ -63,6 +63,7 @@
         <p class='stat_val' id='current_power'> </p>
 
         <p class='stat_measure' id="hotwatercylinder"></p>
+        <p class='stat_measure' id="spapoolheating"></p>
       </li>
 
       <li>
@@ -210,6 +211,11 @@
       });
     }
 
+    function spapoolheating() {
+      $.get('spapoolheating', function (data) {
+        $('#spapoolheating').html(data);
+      });
+    }
 
     function getoutsidenow() {
       $.get('outdoortemperature', function (data) {
@@ -305,6 +311,10 @@
 
     $(document).ready(function () {
       setInterval(hotwatercylinder, 30150);
+    });
+
+    $(document).ready(function () {
+      setInterval(spapoolheating, 30150);
     });
 
     $(document).ready(function () {
