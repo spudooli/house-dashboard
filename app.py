@@ -267,6 +267,17 @@ def gardenshed():
         #html = "<i class='material-icons' style='font-size:20px;color:red'>error</i> Garden Shed"
     return html 
 
+@app.route("/spapooltemperature")
+def spapooltemperature():
+    jsonFile = open("/var/www/scripts/spa-temperature.json", "r")
+    data = json.load(jsonFile)
+    jsonFile.close()
+    waterTemp = round(data["WaterTemp"], 2)
+    if waterTemp == 0:
+        waterTemp = "-"
+    html = "Spa Pool - " + str(waterTemp) + "&deg;C"
+    return html 
+
 @app.route("/osmc")
 def osmc():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

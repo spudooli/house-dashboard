@@ -41,6 +41,10 @@
           <!-- img goes here -->
           <p id=""></p>
         </li>
+        <li>
+          <!-- img goes here -->
+          <p id="spapooltemperature"></p>
+        </li>
       </ul>
 
 
@@ -172,6 +176,12 @@
     function gardenshed() {
       $.get('gardenshed', function (data) {
         $('#gardenshed').html(data);
+      });
+    }
+
+    function spapooltemperature() {
+      $.get('spapooltemperature', function (data) {
+        $('#spapooltemperature').html(data);
       });
     }
 
@@ -338,6 +348,10 @@
     });
 
     $(document).ready(function () {
+      setInterval(spapooltemperature, 300000);
+    });
+
+    $(document).ready(function () {
       setInterval(verandahlights, 300000);
     });
 
@@ -422,6 +436,7 @@
       the100x60weeks();
       gardenlights();
       gardenshed();
+      spapooltemperature();
       verandahlights();
       osmc();
     }
