@@ -275,7 +275,7 @@ def spapooltemperature():
     waterTemp = round(data["WaterTemp"], 2)
     if waterTemp == 0:
         waterTemp = "-"
-    html = "Spa Pool - " + str(waterTemp) + "&deg;C"
+    html = "Spa Pool: " + str(waterTemp) + "&deg;C"
     return html 
 
 @app.route("/osmc")
