@@ -236,9 +236,7 @@ def websitecomments():
     cursor.execute("SELECT count(id) count FROM `pixelpost_comments` where publish = 'no'")
     websitecomments = cursor.fetchone()
     cursor.close()
-    if websitecomments[0] == 1:
-        html = str(websitecomments[0]) + " comment awaiting approval"
-    if websitecomments[0] > 1:
+    if websitecomments[0] > 0:
         html = str(websitecomments[0]) + " comments awaiting approval"
     else:
         html = ""
@@ -389,6 +387,8 @@ def weather():
 
     #pressuredirection = statusFile("pressureDirection")
     pressuredirection = statusFile("pressureDirection")
+    if pressuredirection == "up":
+        pressuredirectionicon= "<i class='material-icons' >arrow_upward</i>"
     if pressuredirection == "upslowly":
         pressuredirectionicon= "<i class='material-icons' >arrow_upward</i>"
     if pressuredirection == "upslowly-goodcoming":
