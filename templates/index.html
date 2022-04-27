@@ -39,7 +39,7 @@
         </li>
         <li>
           <!-- img goes here -->
-          <p id=""></p>
+          <p id="websitecomments"></p>
         </li>
         <li>
           <!-- img goes here -->
@@ -182,6 +182,12 @@
     function spapooltemperature() {
       $.get('spapooltemperature', function (data) {
         $('#spapooltemperature').html(data);
+      });
+    }
+    
+    function websitecomments() {
+      $.get('websitecomments', function (data) {
+        $('#websitecomments').html(data);
       });
     }
 
@@ -352,6 +358,10 @@
     });
 
     $(document).ready(function () {
+      setInterval(websitecomments, 900000);
+    });
+
+    $(document).ready(function () {
       setInterval(verandahlights, 300000);
     });
 
@@ -437,6 +447,7 @@
       gardenlights();
       gardenshed();
       spapooltemperature();
+      websitecomments();
       verandahlights();
       osmc();
     }

@@ -230,6 +230,21 @@ def sharesies():
     html = "<strong>Sharesies:</strong> $" + str("{:,}".format(sharesiesbalance)) + "</br> Change today: $" + str(change).split(".")[0]
     return html
 
+@app.route("/websitecomments")
+def websitecomments():
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT count(id) count FROM `pixelpost_comments` where publish = 'no'")
+    websitecomments = cursor.fetchone()
+    cursor.close()
+    if websitecomments[0] == 1:
+        html = str(websitecomments[0]) + " comment awaiting approval"
+    if websitecomments[0] > 1:
+        html = str(websitecomments[0]) + " comments awaiting approval"
+    else:
+        html = ""
+    return html
+
+
 @app.route("/harmoney")
 def harmoney():
     harmoneystring = statusFile("harmoney")
