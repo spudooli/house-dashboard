@@ -111,10 +111,8 @@ def getdate():
 
 @app.route("/hotwatercylinder")
 def hotwater():
-    f = open("/var/www/scripts/power.txt", "r")    
-    power = f.read()
-    hotwater = power.split(",")[1]
-    if hotwater == "0":
+    hotwater = r.get('hotwater')
+    if int(hotwater) == "0":
         html = "" 
     else:
         html =  "The hot water cylinder is heating"
