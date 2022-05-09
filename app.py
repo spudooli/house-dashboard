@@ -10,10 +10,14 @@ from flask_mysqldb import MySQL
 import config
 import socket
 import paho.mqtt.client as paho
+import redis
+
+
 
 
 app = Flask(__name__)
 
+r = redis.StrictRedis('localhost', 6379, charset="utf-8", decode_responses=True)
 
 mysql = MySQL()
 
@@ -46,7 +50,7 @@ def dashboard():
 
 @app.route("/indoortemperature")
 def indoorTemperature():
-    indoortemp = statusFile("indoorTemperature") + "&deg;"
+    indoortemp = r.get('indoorTemperature') + "&deg;"
     return indoortemp
 
 @app.route("/bankbalance")
@@ -78,7 +82,7 @@ def bankbalancehistory():
 
 @app.route("/outdoortemperature")
 def outdoorTemperature():
-    outdoortemp = statusFile("outdoorTemperature") + "&deg;"
+    outdoortemp = r.get('outdoorTemperature') + "&deg;"
     return outdoortemp
 
 @app.route("/outsidehighslows")
@@ -276,8 +280,8 @@ def gardenshed():
     if result == 0:
         html = ""
     else:
-        html = ""
-        #html = "<i class='material-icons' style='font-size:20px;color:red'>error</i> Garden Shed"
+        #html = ""
+        html = "<i class='material-icons' style='font-size:20px;color:red'>error</i> Garden Shed"
     return html 
 
 @app.route("/spapooltemperature")
