@@ -55,9 +55,7 @@ def indoorTemperature():
 
 @app.route("/bankbalance")
 def bankbalance():
-    f = open("/var/www/scripts/otherbalance.txt", "r")    
-    bankbalance = f.read()
-    html = "$" + bankbalance.split(".")[0]
+    html = "$" + r.get('bankbalance').split(".")[0]
     return html
 
 @app.route("/bankbalancehistory")
@@ -132,7 +130,7 @@ def spapoolheating():
 
 @app.route("/the100x60project")
 def the100x60project():
-    the100x60project = int(statusFile("total100x60").split(".")[0])
+    the100x60project = int(r.get('total100x60'))
     the100x60project = "$" + f'{the100x60project:,}'
     return the100x60project
 
@@ -141,11 +139,11 @@ def the100x60weeks():
     d1 = date.today()
     d2 = date(2027,11,17)
     weeks = (d2-d1).days//7
-    the100x60project = int(statusFile("total100x60").split(".")[0])
+    the100x60project = int(r.get('total100x60'))
     averageperweektogo = int("100000") - int(the100x60project)
     averageperweektogo = int(averageperweektogo) / weeks
     averageperweektogo = str(averageperweektogo)
-    totalsavings = int(statusFile("totalsavings"))
+    totalsavings = int(r.get('totalsavings'))
     html = "Average required per week: $" + averageperweektogo.split(".")[0] + "<br /> <br />Total Retirement Savings: $" + "{:,}".format(totalsavings)
     return html
 
@@ -185,24 +183,22 @@ def thesun():
 
 @app.route("/simplicity")
 def simplicity():
-    simplicityDave = statusFile("simplicityDave")
+    simplicityDave = r.get("simplicityDave")
     simplicityGabba = statusFile("simplicityGabba")
-    homeloanbalance = statusFile("homeloanbalance")
+    homeloanbalance = r.get('homeloanbalance')
     punakaikicurrentvalue = "8179"
 
     html = "<strong>Home Loan:</strong> " +  homeloanbalance + "<br><br><strong>Kiwisaver Dave:</strong> " + simplicityDave + "<br><strong>Kiwisaver Gabba:</strong> " + simplicityGabba + "<br><strong>Punakaiki:</strong> $" + "8,122"
 
     # Calculate the100x60project balance here only because I have most of the values needed already
-    f = open("/var/www/scripts/sharesiesbalance.txt", "r")    
-    sharesiesbalance = int(f.read())
-    harmoneystring = statusFile("harmoney")
+    sharesiesbalance = int(r.get('sharesies'))
+    harmoneystring = r.get('harmoney')
     harmoneystring = harmoneystring.split(":")[1].replace(",", "").replace("$", "")
     harmoneystring = harmoneystring.split(".")[0]
     simplicityDave = simplicityDave.replace(",", "").replace("$", "")
     simplicityGabba = simplicityGabba.replace(",", "").replace("$", "")
-    # TODO: Net Worth needs home loan and house valued added 
     totalsavings = int(simplicityDave) + int(simplicityGabba) + int(harmoneystring) + int(punakaikicurrentvalue) + int(sharesiesbalance) 
-    networth = int(totalsavings) + int(1200000) - int(283600)
+    #networth = int(totalsavings) + int(1200000) - int(homeloanbalance)
     the100x60projectbalance = int(harmoneystring) + int(punakaikicurrentvalue) + int(sharesiesbalance)
 
     broker = "192.168.1.2"
@@ -214,7 +210,7 @@ def simplicity():
         print("Connected With Result Code "+rc)
 
     client1.publish("house/money/total100x60", the100x60projectbalance)
-    client1.publish("house/money/networth", networth)
+    #client1.publish("house/money/networth", networth)
     client1.publish("house/money/totalsavings", totalsavings)
     client1.disconnect
 
@@ -222,8 +218,7 @@ def simplicity():
 
 @app.route("/sharesies")
 def sharesies():
-    f = open("/var/www/scripts/sharesiesbalance.txt", "r")    
-    sharesiesbalance = int(f.read())
+    sharesiesbalance = int(r.get('sharesies'))
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT id, amount FROM `sharesies` order by`id` DESC limit 1")
     yesterdaysbalance = cursor.fetchone()
@@ -388,7 +383,7 @@ def weather():
         sundayicon = "<span class='fs1 climacon thunder' aria-hidden='true'></span>"
 
     #pressuredirection = statusFile("pressureDirection")
-    pressuredirection = statusFile("pressureDirection")
+    pressuredirection = r.get("pressureDirection")
     if pressuredirection == "up":
         pressuredirectionicon= "<i class='material-icons' >arrow_upward</i>"
     if pressuredirection == "upslowly":
@@ -403,7 +398,7 @@ def weather():
         pressuredirectionicon= "<i class='material-icons' >arrow_forward</i>"
 
     #indoorPressure = statusFile("indoorPressure")
-    indoorPressure = statusFile("indoorPressure")
+    indoorPressure = r.get("indoorPressure")
     indoorPressure = indoorPressure[0:-2]
 
     html = todayforecast + "<br>"
