@@ -110,7 +110,7 @@ def getdate():
 @app.route("/hotwatercylinder")
 def hotwater():
     hotwater = r.get('hotwater')
-    if int(hotwater) == "0":
+    if int(hotwater) == 0:
         html = "" 
     else:
         html =  "The hot water cylinder is heating"
