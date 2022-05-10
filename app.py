@@ -85,15 +85,15 @@ def outdoorTemperature():
 
 @app.route("/outsidehighslows")
 def outsidehighslows():
-    outdoorHigh = statusFile("outdoorHigh") + "&deg;"
-    outdoorLow = statusFile("outdoorLow") + "&deg;"
+    outdoorHigh = r.get("outdoorHigh") + "&deg;"
+    outdoorLow = r.get("outdoorLow") + "&deg;"
     html = "Today's High: " +  outdoorHigh + "<br />  Todays Low: " + outdoorLow + "</p>"
     return html
 
 @app.route("/insidehighslows")
 def insidehighslows():
-    indoorHigh = statusFile("indoorHigh") + "&deg;"
-    indoorLow = statusFile("indoorLow") + "&deg;"
+    indoorHigh = r.get("indoorHigh") + "&deg;"
+    indoorLow = r.get("indoorLow") + "&deg;"
     html = "Today's High: " +  indoorHigh + "<br />  Todays Low: " + indoorLow + "</p>"
     return html
 
