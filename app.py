@@ -273,10 +273,7 @@ def gardenshed():
 
 @app.route("/spapooltemperature")
 def spapooltemperature():
-    jsonFile = open("/var/www/scripts/spa-temperature.json", "r")
-    data = json.load(jsonFile)
-    jsonFile.close()
-    waterTemp = round(data["WaterTemp"], 2)
+    waterTemp = r.get('spatemperature')
     if waterTemp == 0:
         waterTemp = "-"
     html = "Spa Pool: " + str(waterTemp) + "&deg;C"
