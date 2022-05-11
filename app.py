@@ -29,12 +29,6 @@ app.config['MYSQL_DB'] = 'spudooli'
 mysql = MySQL(app)
 
 
-def statusFile(thing):
-    jsonFile = open("/var/www/scripts/statusfile.json", "r")
-    data = json.load(jsonFile)
-    jsonFile.close()
-    return data[thing]
-
 def suffix(d):
     # Function to make the data human friendly
     return 'th' if 11<=d<=13 else {1:'st',2:'nd',3:'rd'}.get(d%10, 'th')
@@ -184,7 +178,7 @@ def thesun():
 @app.route("/simplicity")
 def simplicity():
     simplicityDave = r.get("simplicityDave")
-    simplicityGabba = statusFile("simplicityGabba")
+    simplicityGabba = r.get("simplicityGabba")
     homeloanbalance = r.get('homeloanbalance')
     punakaikicurrentvalue = "8179"
 
@@ -242,7 +236,7 @@ def websitecomments():
 
 @app.route("/harmoney")
 def harmoney():
-    harmoneystring = statusFile("harmoney")
+    harmoneystring = r.get("harmoney")
     html = "<strong>Harmoney:</strong> " + harmoneystring.split(":")[1] + " at " + harmoneystring.split(":")[2] + " </br> Funds available: " + harmoneystring.split(":")[0].split(".")[0]
     return html 
 
@@ -382,7 +376,6 @@ def weather():
     if sunday == "Thunder":
         sundayicon = "<span class='fs1 climacon thunder' aria-hidden='true'></span>"
 
-    #pressuredirection = statusFile("pressureDirection")
     pressuredirection = r.get("pressureDirection")
     if pressuredirection == "up":
         pressuredirectionicon= "<i class='material-icons' >arrow_upward</i>"
@@ -397,7 +390,6 @@ def weather():
     if pressuredirection == "stable":
         pressuredirectionicon= "<i class='material-icons' >arrow_forward</i>"
 
-    #indoorPressure = statusFile("indoorPressure")
     indoorPressure = r.get("indoorPressure")
     indoorPressure = indoorPressure[0:-2]
 
