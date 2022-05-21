@@ -2,7 +2,6 @@ from flask import Flask
 from flask import render_template
 from datetime import datetime as dt
 from datetime import date
-import string
 import uuid
 import urllib.request
 import json
@@ -11,9 +10,6 @@ import config
 import socket
 import paho.mqtt.client as paho
 import redis
-
-
-
 
 app = Flask(__name__)
 
