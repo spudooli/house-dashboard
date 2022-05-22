@@ -378,10 +378,13 @@ def weather():
         pressuredirectionicon= "<i class='material-icons' >arrow_upward</i>"
     if pressuredirection == "downslowly":
         pressuredirectionicon= "<i class='material-icons' >arrow_downward</i>"
+    if pressuredirection == "down":
+        pressuredirectionicon= "<i class='material-icons' >arrow_downward</i>"
     if pressuredirection == "downslowly-nogoodcoming":
         pressuredirectionicon= "<i class='material-icons' >arrow_downward</i>"
     if pressuredirection == "stable":
         pressuredirectionicon= "<i class='material-icons' >arrow_forward</i>"
+
 
     indoorPressure = r.get("indoorPressure")
     indoorPressure = indoorPressure[0:-2]
