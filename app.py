@@ -17,8 +17,8 @@ r = redis.StrictRedis('localhost', 6379, charset="utf-8", decode_responses=True)
 
 mysql = MySQL()
 
-app.config['MYSQL_HOST'] = '192.168.1.2'
-app.config['MYSQL_USER'] = 'sammy'
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'bobthefish'
 app.config['MYSQL_DB'] = 'spudooli'
 
@@ -223,8 +223,12 @@ def websitecomments():
     cursor.execute("SELECT count(id) count FROM `pixelpost_comments` where publish = 'no'")
     websitecomments = cursor.fetchone()
     cursor.close()
-    if websitecomments[0] > 0:
-        html = str(websitecomments[0]) + " comments awaiting approval"
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT count(id) count FROM `contactus` where checked is NULL")
+    contactus = cursor.fetchone()
+    cursor.close()
+    if websitecomments[0] > 0 or contactus[0] > 0:
+        html = str(websitecomments[0]) + " comments/contactus awaiting approval"
     else:
         html = ""
     return html
