@@ -176,9 +176,9 @@ def simplicity():
     simplicityDave = r.get("simplicityDave")
     simplicityGabba = r.get("simplicityGabba")
     homeloanbalance = r.get('homeloanbalance')
-    punakaikicurrentvalue = "8179"
+    punakaikicurrentvalue = "9513"
 
-    html = "<strong>Home Loan:</strong> " +  homeloanbalance + "<br><br><strong>Kiwisaver Dave:</strong> " + simplicityDave + "<br><strong>Kiwisaver Gabba:</strong> " + simplicityGabba + "<br><strong>Punakaiki:</strong> $" + "8,122"
+    html = "<strong>Home Loan:</strong> " +  homeloanbalance + "<br><br><strong>Kiwisaver Dave:</strong> " + simplicityDave + "<br><strong>Kiwisaver Gabba:</strong> " + simplicityGabba + "<br><strong>Punakaiki:</strong> $" + "9,513"
 
     # Calculate the100x60project balance here only because I have most of the values needed already
     sharesiesbalance = int(r.get('sharesies'))
@@ -350,7 +350,7 @@ def weather():
     if saturday == "Windy":
         saturdayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
     if saturday == "Thunder":
-        saturdayicon = "<span class='fs1 climacon thunder' aria-hidden='true'></span>"
+        saturdayicon = "<span class='fs1 climacon lightning' aria-hidden='true'></span>"
 
     if sunday == "Partly cloudy":
         sundayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
@@ -371,7 +371,7 @@ def weather():
     if sunday == "Windy":
         sundayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
     if sunday == "Thunder":
-        sundayicon = "<span class='fs1 climacon thunder' aria-hidden='true'></span>"
+        sundayicon = "<span class='fs1 climacon lightning' aria-hidden='true'></span>"
 
     pressuredirection = r.get("pressureDirection")
     if pressuredirection == "up":
