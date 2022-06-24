@@ -331,6 +331,16 @@ def weather():
     saturday = jsonData['saturdayForecastWord']
     sunday = jsonData['sundayForecastWord']
 
+    r.set("saturdayForecastWord", saturday)
+    r.set("sundayForecastWord", sunday)
+    r.set("todayForecast", todayforecast)
+    r.set("tomorrowForecast", tomorrowforecast)
+    r.set("todayMax", todaymax)
+    r.set("todayMin", todaymin)
+    r.set("tomorrowMax", tomorrowmax)
+    r.set("tomorrowMin", tomorrowmin)
+
+
     if saturday == "Partly cloudy":
         saturdayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
     if saturday == "Few showers":
