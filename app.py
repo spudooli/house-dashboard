@@ -182,14 +182,14 @@ def simplicity():
 
     # Calculate the100x60project balance here only because I have most of the values needed already
     sharesiesbalance = int(r.get('sharesies'))
-    harmoneystring = r.get('harmoney')
-    harmoneystring = harmoneystring.split(":")[1].replace(",", "").replace("$", "")
-    harmoneystring = harmoneystring.split(".")[0]
+    # harmoneystring = r.get('harmoney')
+    # harmoneystring = harmoneystring.split(":")[1].replace(",", "").replace("$", "")
+    # harmoneystring = harmoneystring.split(".")[0]
     simplicityDave = simplicityDave.replace(",", "").replace("$", "")
     simplicityGabba = simplicityGabba.replace(",", "").replace("$", "")
-    totalsavings = int(simplicityDave) + int(simplicityGabba) + int(harmoneystring) + int(punakaikicurrentvalue) + int(sharesiesbalance) 
+    totalsavings = int(simplicityDave) + int(simplicityGabba) + int(punakaikicurrentvalue) + int(sharesiesbalance) 
     #networth = int(totalsavings) + int(1200000) - int(homeloanbalance)
-    the100x60projectbalance = int(harmoneystring) + int(punakaikicurrentvalue) + int(sharesiesbalance)
+    the100x60projectbalance = int(punakaikicurrentvalue) + int(sharesiesbalance)
 
     broker = "192.168.1.2"
     port = 1883
