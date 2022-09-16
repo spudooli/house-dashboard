@@ -10,6 +10,8 @@ import config
 import socket
 import paho.mqtt.client as paho
 import redis
+from dateutil.relativedelta import relativedelta
+
 
 app = Flask(__name__)
 
@@ -134,7 +136,7 @@ def the100x60weeks():
     averageperweektogo = int(averageperweektogo) / weeks
     averageperweektogo = str(averageperweektogo)
     totalsavings = int(r.get('totalsavings'))
-    html = "Average required per week: $" + averageperweektogo.split(".")[0] + "<br /> <br />Total Retirement Savings: $" + "{:,}".format(totalsavings)
+    html = "Average required per week: <strong>$" + averageperweektogo.split(".")[0] + "</strong><br /> <br />Total Retirement Savings: <strong>$" + "{:,}".format(totalsavings) + "</strong>"
     return html
 
 @app.route("/rainradar")
@@ -177,18 +179,20 @@ def simplicity():
     simplicityGabba = r.get("simplicityGabba")
     homeloanbalance = r.get('homeloanbalance')
     punakaikicurrentvalue = "9513"
+    homeloanmonths = homeloanbalance.split(".")[0].replace("-$", "").replace(",", "")
+    homeloanmonths = int(homeloanmonths) / 4000
+    homeloanTarget= date.today() + relativedelta(months=+int(homeloanmonths))
+    print(homeloanmonths)
+    print(homeloanTarget.strftime("%b %Y"))
 
-    html = "<strong>Home Loan:</strong> " +  homeloanbalance + "<br><br><strong>Kiwisaver Dave:</strong> " + simplicityDave + "<br><strong>Kiwisaver Gabba:</strong> " + simplicityGabba + "<br><strong>Punakaiki:</strong> $" + "9,513"
+    html = "Home Loan:<strong> " +  homeloanbalance + "</strong><br>Target end date: <strong>" + homeloanTarget.strftime("%b %Y") + "</strong><br><br>Kiwisaver Dave:<strong> " + simplicityDave + "<br></strong>Kiwisaver Gabba:<strong> " + simplicityGabba + "<br></strong>Punakaiki:<strong> $" + "9,513</strong>"
 
     # Calculate the100x60project balance here only because I have most of the values needed already
     sharesiesbalance = int(r.get('sharesies'))
-    # harmoneystring = r.get('harmoney')
-    # harmoneystring = harmoneystring.split(":")[1].replace(",", "").replace("$", "")
-    # harmoneystring = harmoneystring.split(".")[0]
     simplicityDave = simplicityDave.replace(",", "").replace("$", "")
     simplicityGabba = simplicityGabba.replace(",", "").replace("$", "")
     totalsavings = int(simplicityDave) + int(simplicityGabba) + int(punakaikicurrentvalue) + int(sharesiesbalance) 
-    #networth = int(totalsavings) + int(1200000) - int(homeloanbalance)
+    #networth = int(totalsavings) + int(1000000) - int(homeloanbalance)
     the100x60projectbalance = int(punakaikicurrentvalue) + int(sharesiesbalance)
 
     broker = "192.168.1.2"
@@ -214,7 +218,7 @@ def sharesies():
     yesterdaysbalance = cursor.fetchone()
     change = sharesiesbalance - yesterdaysbalance[1]
     cursor.close()
-    html = "<strong>Sharesies:</strong> $" + str("{:,}".format(sharesiesbalance)) + "</br> Change today: $" + str(change).split(".")[0]
+    html = "Sharesies:<strong> $" + str("{:,}".format(sharesiesbalance)) + "</strong></br> Change today: $" + str(change).split(".")[0]
     return html
 
 @app.route("/websitecomments")
@@ -233,12 +237,6 @@ def websitecomments():
         html = ""
     return html
 
-
-@app.route("/harmoney")
-def harmoney():
-    harmoneystring = r.get("harmoney")
-    html = "<strong>Harmoney:</strong> " + harmoneystring.split(":")[1] + " at " + harmoneystring.split(":")[2] + " </br> Funds available: " + harmoneystring.split(":")[0].split(".")[0]
-    return html 
 
 @app.route("/gardenlights")
 def gardenlights():

@@ -89,7 +89,6 @@
         <h2>Things</h2>
         <p class='stat_weather' id='simplicity'></p><br>
         <p class='stat_weather' id='sharesies'></p><br>
-        <p class='stat_weather' id='harmoney'></p>
         <!-- <div class='audienceBox' id='audienceBox'> 
 </div> -->
       </li>
@@ -155,17 +154,17 @@
     }
 
 
-    function gardenlights() {
-      $.get('gardenlights', function (data) {
-        $('#gardenlights').html(data);
-      });
-    }
+    // function gardenlights() {
+    //   $.get('gardenlights', function (data) {
+    //     $('#gardenlights').html(data);
+    //   });
+    // }
 
-    function verandahlights() {
-      $.get('verandahlights', function (data) {
-        $('#verandahlights').html(data);
-      });
-    }
+    // function verandahlights() {
+    //   $.get('verandahlights', function (data) {
+    //     $('#verandahlights').html(data);
+    //   });
+    // }
 
     function osmc() {
       $.get('osmc', function (data) {
@@ -188,12 +187,6 @@
     function websitecomments() {
       $.get('websitecomments', function (data) {
         $('#websitecomments').html(data);
-      });
-    }
-
-    function harmoney() {
-      $.get('harmoney', function (data) {
-        $('#harmoney').html(data);
       });
     }
 
@@ -345,9 +338,9 @@
       setInterval(simplicity, 900000);
     });
 
-    $(document).ready(function () {
-      setInterval(gardenlights, 300000);
-    });
+    // $(document).ready(function () {
+    //   setInterval(gardenlights, 300000);
+    // });
 
     $(document).ready(function () {
       setInterval(gardenshed, 300000);
@@ -361,9 +354,9 @@
       setInterval(websitecomments, 60000);
     });
 
-    $(document).ready(function () {
-      setInterval(verandahlights, 300000);
-    });
+    // $(document).ready(function () {
+    //   setInterval(verandahlights, 300000);
+    // });
 
     $(document).ready(function () {
       setInterval(osmc, 300000);
@@ -379,10 +372,6 @@
 
     $(document).ready(function () {
       setInterval(the100x60weeks, 900000);
-    });
-
-    $(document).ready(function () {
-      setInterval(harmoney, 900000);
     });
 
     $(document).ready(function () {
@@ -436,7 +425,6 @@
       bankbalancehistory();
       simplicity();
       sharesies();
-      harmoney();
       gettime();
       getdate();
       rainradar();
@@ -444,11 +432,11 @@
       bankbalance()
       the100x60project();
       the100x60weeks();
-      gardenlights();
+      // gardenlights();
       gardenshed();
       spapooltemperature();
       websitecomments();
-      verandahlights();
+      // verandahlights();
       osmc();
     }
 

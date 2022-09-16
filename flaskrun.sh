@@ -1,3 +1,1 @@
-export FLASK_ENV=development
-export FLASK_APP=app
-flask run
+flask --app app --debug run
