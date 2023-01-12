@@ -218,6 +218,7 @@ def sharesies():
     yesterdaysbalance = cursor.fetchone()
     change = sharesiesbalance - yesterdaysbalance[1]
     cursor.close()
+    r.set('sharesieschange', change)
     html = "Sharesies:<strong> $" + str("{:,}".format(sharesiesbalance)) + "</strong></br> Change today: $" + str(change).split(".")[0]
     return html
 
