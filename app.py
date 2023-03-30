@@ -178,7 +178,7 @@ def simplicity():
     simplicityDave = r.get("simplicityDave")
     simplicityGabba = r.get("simplicityGabba")
     homeloanbalance = r.get('homeloanbalance')
-    punakaikicurrentvalue = "9513"
+    punakaikicurrentvalue = "10235"
     homeloanmonths = homeloanbalance.split(".")[0].replace("-$", "").replace(",", "")
     homeloanmonths = int(homeloanmonths) / 4000
     homeloanTarget= date.today() + relativedelta(months=+int(homeloanmonths))
@@ -189,8 +189,8 @@ def simplicity():
 
     # Calculate the100x60project balance here only because I have most of the values needed already
     sharesiesbalance = int(r.get('sharesies'))
-    simplicityDave = simplicityDave.replace(",", "").replace("$", "")
-    simplicityGabba = simplicityGabba.replace(",", "").replace("$", "")
+    simplicityDave = simplicityDave.replace(",", "").replace("$", "").replace(".", "")
+    simplicityGabba = simplicityGabba.replace(",", "").replace("$", "").replace(".", "")
     totalsavings = int(simplicityDave) + int(simplicityGabba) + int(punakaikicurrentvalue) + int(sharesiesbalance) 
     #networth = int(totalsavings) + int(1000000) - int(homeloanbalance)
     the100x60projectbalance = int(punakaikicurrentvalue) + int(sharesiesbalance)
@@ -218,7 +218,7 @@ def sharesies():
     yesterdaysbalance = cursor.fetchone()
     change = sharesiesbalance - yesterdaysbalance[1]
     cursor.close()
-    r.set('sharesieschange', change)
+    r.set('sharesieschange', int(change))
     html = "Sharesies:<strong> $" + str("{:,}".format(sharesiesbalance)) + "</strong></br> Change today: $" + str(change).split(".")[0]
     return html
 
