@@ -9,7 +9,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js" type="text/javascript"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
-  <script src={{ url_for('static', filename='mqtt.js' ) }} type="text/javascript"></script>
+  <!-- <script src={{ url_for('static', filename='mqtt.js' ) }} type="text/javascript"></script> -->
   <script src={{ url_for('static', filename='sparkline.js' ) }} type="text/javascript"></script>
   <link href={{ url_for('static', filename='all.css' ) }} media="screen" rel="stylesheet" type="text/css" />
 </head>
@@ -51,15 +51,15 @@
     </div>
     <ul class='stats group'>
       <li>
-        <h2>Inside Temp</h2>
-        <p class='stat_val' id='insidenow'></p>
-        <p class='stat_measure' id='insidehighslows'>
-      </li>
-
-      <li>
         <h2>Outside Temp</h2>
         <p class='stat_val' id='outsidenow'></p>
         <p class='stat_measure' id='outsidehighslows'>
+      </li>
+  
+      <li>
+        <h2>BMW i3 km</h2>
+        <p class='stat_val' id='i3range'></p>
+        <p class='stat_measure' id='i3chargingstatus'></p>
       </li>
       <li>
 
@@ -196,6 +196,18 @@
       });
     }
 
+    function bmwi3range() {
+      $.get('i3rangeremaining', function (data) {
+        $('#i3range').text(data);
+      });
+    }
+
+    function i3chargingstatus() {
+      $.get('i3chargingstatus', function (data) {
+        $('#i3chargingstatus').html(data);
+      });
+    }
+
     function the100x60weeks() {
       $.get('the100x60weeks', function (data) {
         $('#the100x60weeks').html(data);
@@ -236,7 +248,6 @@
     function getinsidenow() {
       $.get('indoortemperature', function (data) {
         $('#insidenow').html(data);
-
       });
     }
 
@@ -300,7 +311,12 @@
     function weather() {
       $.get('weather', function (data) {
         $('#weather').html(data);
+      });
+    }
 
+    function power() {
+      $.get('power', function (data) {
+        $('#current_power').text(data);
       });
     }
 
@@ -310,16 +326,26 @@
       });
     }
 
-
-    function getpowerchartvalue() {
-      $.get('', function (data) {
-        values.set(data);
-        $('#current_power').text(data);
-      });
-    }
-
     $(document).ready(function () {
       setInterval(hotwatercylinder, 30150);
+    });
+
+    $(document).ready(function () {
+      setInterval(power, 6000);
+    });
+
+
+    $(document).ready(function () {
+      setInterval(getinsidenow, 120000);
+    });
+
+    
+    $(document).ready(function () {
+      setInterval(bmwi3range, 900000);
+    });
+
+    $(document).ready(function () {
+      setInterval(i3chargingstatus, 900000);
     });
 
     $(document).ready(function () {
@@ -432,6 +458,8 @@
       bankbalance()
       the100x60project();
       the100x60weeks();
+      bmwi3range();
+      i3chargingstatus();
       // gardenlights();
       gardenshed();
       spapooltemperature();

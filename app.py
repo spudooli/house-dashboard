@@ -45,6 +45,11 @@ def indoorTemperature():
     indoortemp = r.get('indoorTemperature') + "&deg;"
     return indoortemp
 
+@app.route("/power")
+def power():
+    indoortemp = r.get('power')
+    return indoortemp
+
 @app.route("/bankbalance")
 def bankbalance():
     html = "$" + r.get('bankbalance').split(".")[0]
@@ -72,14 +77,14 @@ def bankbalancehistory():
 
 @app.route("/outdoortemperature")
 def outdoorTemperature():
-    outdoortemp = r.get('outdoorTemperature') + "&deg;"
+    outdoortemp = r.get('outdoorTemperature')
     return outdoortemp
 
 @app.route("/outsidehighslows")
 def outsidehighslows():
     outdoorHigh = r.get("outdoorHigh") + "&deg;"
     outdoorLow = r.get("outdoorLow") + "&deg;"
-    html = "Today's High: " +  outdoorHigh + "<br />  Todays Low: " + outdoorLow + "</p>"
+    html = "Today's High: " +  outdoorHigh + "<br />  Today's Low: " + outdoorLow + "</p>"
     return html
 
 @app.route("/insidehighslows")
@@ -185,7 +190,7 @@ def simplicity():
     print(homeloanmonths)
     print(homeloanTarget.strftime("%b %Y"))
 
-    html = "Home Loan:<strong> " +  homeloanbalance + "</strong><br>Forecast end date: <strong>" + homeloanTarget.strftime("%b %Y") + "</strong><br><br>Kiwisaver Dave:<strong> " + simplicityDave + "<br></strong>Kiwisaver Gabba:<strong> " + simplicityGabba + "<br></strong>Punakaiki:<strong> $" + "9,319</strong>"
+    html = "Home Loan:<strong> " +  homeloanbalance + "</strong><br>Forecast end date: <strong>" + homeloanTarget.strftime("%b %Y") + "</strong><br><br>Kiwisaver Dave:<strong> " + simplicityDave + "<br></strong>Kiwisaver Gabba:<strong> " + simplicityGabba + "<br></strong>Punakaiki:<strong> $" + "10,235</strong>"
 
     # Calculate the100x60project balance here only because I have most of the values needed already
     sharesiesbalance = int(r.get('sharesies'))
@@ -238,6 +243,15 @@ def websitecomments():
         html = ""
     return html
 
+@app.route("/i3chargingstatus")
+def i3chargingstatus():
+    html = f"Battery Remainaing: <strong>{r.get('i3batteryremaining')}%</strong>"
+    return html
+
+@app.route("/i3rangeremaining")
+def i3rangeremaining():
+    i3rangeremaining = f"{r.get('i3rangeremaining')}"
+    return i3rangeremaining
 
 @app.route("/gardenlights")
 def gardenlights():
