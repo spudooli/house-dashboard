@@ -1,7 +1,9 @@
 from flask import Flask
 from flask import render_template
 from datetime import datetime as dt
+from datetime import datetime
 from datetime import date
+import pytz
 import uuid
 import urllib.request
 import json
@@ -245,7 +247,23 @@ def websitecomments():
 
 @app.route("/i3chargingstatus")
 def i3chargingstatus():
-    html = f"Battery Remainaing: <strong>{r.get('i3batteryremaining')}%</strong>"
+    i3chargingstatus = r.get('i3chargingstatus')
+    if i3chargingstatus == "CHARGING":
+        charging = " CHARGING"
+        i3chargecompletiontime = r.get('i3chargecompletiontime')
+        # Convert the given datetime string to a datetime object
+        dete = datetime.fromisoformat(i3chargecompletiontime)
+        # Set the timezone to NZ
+        nz_tz = pytz.timezone('Pacific/Auckland')
+        dt_nz = dete.astimezone(nz_tz)
+        # Print the NZ timezone time
+        i3chargecompletiontime_formatted_time = dt_nz.strftime('%Y-%m-%d %H:%M')
+        html = f"Battery Remaining: <strong>{r.get('i3batteryremaining')}% <br>{charging} until  {i3chargecompletiontime_formatted_time}</strong>"
+    else:
+        charging = ""
+        #html = f"Battery Remaining: <strong>{r.get('i3batteryremaining')}%</strong>"
+        html = f"<div class='audienceGraph' id='audience_caffeination_percentage' style='width:{int(r.get('i3batteryremaining')) - 5}%;'><span class='audiencePercent caffeination_level_1'>{r.get('i3batteryremaining')}%</span>"
+
     return html
 
 @app.route("/i3rangeremaining")

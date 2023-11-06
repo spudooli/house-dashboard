@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- <script src="scope.js" type="text/javascript"></script> -->
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js" type="text/javascript"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js" type="text/javascript"></script> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
   <!-- <script src={{ url_for('static', filename='mqtt.js' ) }} type="text/javascript"></script> -->
   <script src={{ url_for('static', filename='sparkline.js' ) }} type="text/javascript"></script>
@@ -59,7 +59,8 @@
       <li>
         <h2>BMW i3 km</h2>
         <p class='stat_val' id='i3range'></p>
-        <p class='stat_measure' id='i3chargingstatus'></p>
+        <div class='audienceBox' id='i3chargingstatus'> </div>
+        <!-- <p class='stat_measure' id='i3chargingstatus'></p> -->
       </li>
       <li>
 
@@ -341,11 +342,11 @@
 
     
     $(document).ready(function () {
-      setInterval(bmwi3range, 900000);
+      setInterval(bmwi3range, 300000);
     });
 
     $(document).ready(function () {
-      setInterval(i3chargingstatus, 900000);
+      setInterval(i3chargingstatus, 300000);
     });
 
     $(document).ready(function () {
@@ -402,6 +403,10 @@
 
     $(document).ready(function () {
       setInterval(outsidehighslows, 600000);
+    });
+
+    $(document).ready(function () {
+      setInterval(getoutsidenow, 600000);
     });
 
     $(document).ready(function () {
