@@ -189,8 +189,6 @@ def simplicity():
     homeloanmonths = homeloanbalance.split(".")[0].replace("-$", "").replace(",", "")
     homeloanmonths = int(homeloanmonths) / 4000
     homeloanTarget= date.today() + relativedelta(months=+int(homeloanmonths))
-    print(homeloanmonths)
-    print(homeloanTarget.strftime("%b %Y"))
 
     html = "Home Loan:<strong> " +  homeloanbalance + "</strong><br>Forecast end date: <strong>" + homeloanTarget.strftime("%b %Y") + "</strong><br><br>Kiwisaver Dave:<strong> " + simplicityDave + "<br></strong>Kiwisaver Gabba:<strong> " + simplicityGabba + "<br></strong>Punakaiki:<strong> $" + "10,235</strong>"
 
@@ -258,7 +256,7 @@ def i3chargingstatus():
         dt_nz = dete.astimezone(nz_tz)
         # Print the NZ timezone time
         i3chargecompletiontime_formatted_time = dt_nz.strftime('%Y-%m-%d %H:%M')
-        html = f"Battery Remaining: <strong>{r.get('i3batteryremaining')}% <br>{charging} until  {i3chargecompletiontime_formatted_time}</strong>"
+        html = f"<strong>{r.get('i3batteryremaining')}% {charging} until  {i3chargecompletiontime_formatted_time}</strong>"
     else:
         charging = ""
         #html = f"Battery Remaining: <strong>{r.get('i3batteryremaining')}%</strong>"
@@ -294,7 +292,7 @@ def verandahlights():
 @app.route("/gardenshed")
 def gardenshed():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    result = sock.connect_ex(('192.168.1.129', 80))
+    result = sock.connect_ex(('192.168.1.150', 80))
     if result == 0:
         html = ""
     else:
