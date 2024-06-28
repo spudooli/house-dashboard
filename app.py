@@ -14,7 +14,6 @@ import paho.mqtt.client as paho
 import redis
 from dateutil.relativedelta import relativedelta
 
-
 app = Flask(__name__)
 
 r = redis.StrictRedis('localhost', 6379, charset="utf-8", decode_responses=True)
@@ -37,6 +36,15 @@ def custom_strftime(format, t):
     #Function to make the data human friendly
     return t.strftime(format).replace('{S}', str(t.day) + suffix(t.day))
 
+def months_until_retirement():
+    # Current date
+    now = datetime.now()
+    target_date = datetime(2032, 11, 17)
+    difference = relativedelta(target_date, now)
+    total_months = difference.years * 12 + difference.months
+    if now.day <= 17:
+        total_months += 1
+    return total_months
 
 @app.route("/")
 def dashboard():
@@ -185,12 +193,14 @@ def simplicity():
     simplicityDave = r.get("simplicityDave")
     simplicityGabba = r.get("simplicityGabba")
     homeloanbalance = r.get('homeloanbalance')
-    punakaikicurrentvalue = "10235"
+    punakaikicurrentvalue = "9220"
     homeloanmonths = homeloanbalance.split(".")[0].replace("-$", "").replace(",", "")
     homeloanmonths = int(homeloanmonths) / 4000
     homeloanTarget= date.today() + relativedelta(months=+int(homeloanmonths))
 
-    html = "Home Loan:<strong> " +  homeloanbalance + "</strong><br>Forecast end date: <strong>" + homeloanTarget.strftime("%b %Y") + "</strong><br><br>Kiwisaver Dave:<strong> " + simplicityDave + "<br></strong>Kiwisaver Gabba:<strong> " + simplicityGabba + "<br></strong>Punakaiki:<strong> $" + "10,235</strong>"
+
+
+    html = "Home Loan:<strong> " +  homeloanbalance + "</strong><br>Forecast end date: <strong>" + homeloanTarget.strftime("%b %Y") + "</strong><br><br>Kiwisaver Dave:<strong> " + simplicityDave + "<br></strong>Kiwisaver Gabba:<strong> " + simplicityGabba + "<br></strong>Punakaiki:<strong> $" + punakaikicurrentvalue  + "</strong> <br> Retiring in <strong>" + str(months_until_retirement()) + "</strong> months" 
 
     # Calculate the100x60project balance here only because I have most of the values needed already
     sharesiesbalance = int(r.get('sharesies'))
