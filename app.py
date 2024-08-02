@@ -42,8 +42,6 @@ def months_until_retirement():
     target_date = datetime(2032, 11, 17)
     difference = relativedelta(target_date, now)
     total_months = difference.years * 12 + difference.months
-    if now.day <= 17:
-        total_months += 1
     return total_months
 
 @app.route("/")
@@ -57,8 +55,9 @@ def indoorTemperature():
 
 @app.route("/power")
 def power():
-    indoortemp = r.get('power')
-    return indoortemp
+    power = r.get('power')
+    #power = "{:,}".format(power)
+    return power
 
 @app.route("/bankbalance")
 def bankbalance():
