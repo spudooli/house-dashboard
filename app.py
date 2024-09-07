@@ -44,6 +44,16 @@ def months_until_retirement():
     total_months = difference.years * 12 + difference.months
     return total_months
 
+def format_time_with_am_pm(time_str):
+    # Parse the input string to a datetime object
+    dt = datetime.fromisoformat(time_str)
+    
+    # Format the datetime object to a string with AM/PM
+    formatted_time = dt.strftime('%I:%M %p')
+    
+    return formatted_time
+
+
 @app.route("/")
 def dashboard():
     return render_template('index.html', title='Spudooli Dashboard')
@@ -165,26 +175,11 @@ def isobars():
 
 @app.route("/thesun")
 def thesun():
-    thesunurl = "http://metservice.com/publicData/localForecastauckland"
-    openUrl = urllib.request.urlopen(thesunurl)
-    data = openUrl.read()
-    jsonData = json.loads(data)
-    sunrise = jsonData['days'][0]['riseSet']['sunRise']
-    sunset = jsonData['days'][0]['riseSet']['sunSet']
-    html = "<span><strong>The Sun: </strong> " + sunrise + " and " + sunset
+
+    sunrise = format_time_with_am_pm(r.get('sunrise'))
+    sunset = format_time_with_am_pm(r.get('sunset'))
+    html = "<span>The Sun: <strong>" + sunrise + "</strong>  and <strong>" + sunset + "</strong></span>"
     
-    broker = "192.168.1.2"
-    port = 1883
-    client1 = paho.Client("dashboardthe100x60project")
-    client1.connect(broker, port)
-
-    def on_connect(client, userdata, flags, rc):
-        print("Connected With Result Code "+rc)
-
-    client1.publish("house/outside/sunset", sunset)
-    client1.publish("house/outside/sunrise", sunrise)
-    client1.disconnect
-
     return html
 
 @app.route("/simplicity")
@@ -192,7 +187,7 @@ def simplicity():
     simplicityDave = r.get("simplicityDave")
     simplicityGabba = r.get("simplicityGabba")
     homeloanbalance = r.get('homeloanbalance')
-    punakaikicurrentvalue = "9220"
+    punakaikicurrentvalue = "9592"
     homeloanmonths = homeloanbalance.split(".")[0].replace("-$", "").replace(",", "")
     homeloanmonths = int(homeloanmonths) / 4000
     homeloanTarget= date.today() + relativedelta(months=+int(homeloanmonths))
@@ -351,75 +346,62 @@ def gabbalocation():
 
 @app.route("/weather")
 def weather():
-    thesunurl = "http://metservice.com/publicData/localForecastauckland"
-    openUrl = urllib.request.urlopen(thesunurl)
-    data = openUrl.read()
-    jsonData = json.loads(data)
 
-    todayforecast = jsonData['days'][0]['forecast']
+    todayforecast = r.get("todayForecast")
     #todayforecastword = jsonData['days'][0]['forecastWord']
-    todaymax = jsonData['days'][0]['max']
-    todaymin = jsonData['days'][0]['min']
+    todaymax = r.get("todayMax")
+    todaymin = r.get("todayMin")
 
-    tomorrowforecast = jsonData['days'][1]['forecast']
+    tomorrowforecast = r.get("tomorrowForecast")
     #tomorrowforecastword = jsonData['days'][1]['forecastWord']
-    tomorrowmax = jsonData['days'][1]['max']
-    tomorrowmin = jsonData['days'][1]['min']
+    tomorrowmax = r.get("tomorrowMax")
+    tomorrowmin = r.get("tomorrowMin")
 
-    saturday = jsonData['saturdayForecastWord']
-    sunday = jsonData['sundayForecastWord']
+    # saturday = jsonData['saturdayForecastWord']
+    # sunday = jsonData['sundayForecastWord']
 
-    r.set("saturdayForecastWord", saturday)
-    r.set("sundayForecastWord", sunday)
-    r.set("todayForecast", todayforecast)
-    r.set("tomorrowForecast", tomorrowforecast)
-    r.set("todayMax", todaymax)
-    r.set("todayMin", todaymin)
-    r.set("tomorrowMax", tomorrowmax)
-    r.set("tomorrowMin", tomorrowmin)
+   
+    # if saturday == "Partly cloudy":
+    #     saturdayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
+    # if saturday == "Few showers":
+    #     saturdayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
+    # if saturday == "Showers":
+    #     saturdayicon = "<span class='fs1 climacon showers' aria-hidden='true'></span>"
+    # if saturday == "Rain":
+    #     saturdayicon = "<span class='fs1 climacon rain' aria-hidden='true'></span>"
+    # if saturday == "Fine":
+    #     saturdayicon = "<span class='fs1 climacon sun' aria-hidden='true'></span>"
+    # if saturday == "Cloudy":
+    #     saturdayicon = "<span class='fs1 climacon cloud' aria-hidden='true'></span>"
+    # if saturday == "Wind rain":
+    #     saturdayicon = "<span class='fs1 climacon wind cloud' aria-hidden='true'></span>"
+    # if saturday == "Drizzle":
+    #     saturdayicon = "<span class='fs1 climacon drizzle' aria-hidden='true'></span>"
+    # if saturday == "Windy":
+    #     saturdayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
+    # if saturday == "Thunder":
+    #     saturdayicon = "<span class='fs1 climacon lightning' aria-hidden='true'></span>"
 
-
-    if saturday == "Partly cloudy":
-        saturdayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
-    if saturday == "Few showers":
-        saturdayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
-    if saturday == "Showers":
-        saturdayicon = "<span class='fs1 climacon showers' aria-hidden='true'></span>"
-    if saturday == "Rain":
-        saturdayicon = "<span class='fs1 climacon rain' aria-hidden='true'></span>"
-    if saturday == "Fine":
-        saturdayicon = "<span class='fs1 climacon sun' aria-hidden='true'></span>"
-    if saturday == "Cloudy":
-        saturdayicon = "<span class='fs1 climacon cloud' aria-hidden='true'></span>"
-    if saturday == "Wind rain":
-        saturdayicon = "<span class='fs1 climacon wind cloud' aria-hidden='true'></span>"
-    if saturday == "Drizzle":
-        saturdayicon = "<span class='fs1 climacon drizzle' aria-hidden='true'></span>"
-    if saturday == "Windy":
-        saturdayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
-    if saturday == "Thunder":
-        saturdayicon = "<span class='fs1 climacon lightning' aria-hidden='true'></span>"
-
-    if sunday == "Partly cloudy":
-        sundayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
-    if sunday == "Few showers":
-        sundayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
-    if sunday == "Showers":
-        sundayicon = "<span class='fs1 climacon showers' aria-hidden='true'></span>"
-    if sunday == "Rain":
-        sundayicon = "<span class='fs1 climacon rain' aria-hidden='true'></span>"
-    if sunday == "Fine":
-        sundayicon = "<span class='fs1 climacon sun' aria-hidden='true'></span>"
-    if sunday == "Cloudy":
-        sundayicon = "<span class='fs1 climacon cloud' aria-hidden='true'></span>"
-    if sunday == "Wind rain":
-        sundayicon = "<span class='fs1 climacon wind cloud' aria-hidden='true'></span>"
-    if sunday == "Drizzle":
-        sundayicon = "<span class='fs1 climacon drizzle' aria-hidden='true'></span>"
-    if sunday == "Windy":
-        sundayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
-    if sunday == "Thunder":
-        sundayicon = "<span class='fs1 climacon lightning' aria-hidden='true'></span>"
+    # if sunday == "Partly cloudy":
+    #     sundayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
+    # if sunday == "Few showers":
+    #     sundayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
+    # if sunday == "Showers":
+    #     sundayicon = "<span class='fs1 climacon showers' aria-hidden='true'></span>"
+    # if sunday == "Rain":
+    #     sundayicon = "<span class='fs1 climacon rain' aria-hidden='true'></span>"
+    # if sunday == "Fine":
+    #     sundayicon = "<span class='fs1 climacon sun' aria-hidden='true'></span>"
+    # if sunday == "Cloudy":
+    #     sundayicon = "<span class='fs1 climacon cloud' aria-hidden='true'></span>"
+    # if sunday == "Wind rain":
+    #     sundayicon = "<span class='fs1 climacon wind cloud' aria-hidden='true'></span>"
+    # if sunday == "Drizzle":
+    #     sundayicon = "<span class='fs1 climacon drizzle' aria-hidden='true'></span>"
+    # if sunday == "Windy":
+    #     sundayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
+    # if sunday == "Thunder":
+    #     sundayicon = "<span class='fs1 climacon lightning' aria-hidden='true'></span>"
 
     pressuredirection = r.get("pressureDirection")
     if pressuredirection == "up":
@@ -447,8 +429,8 @@ def weather():
     html +=  tomorrowforecast + "<br>"
     html += "<br><table width=100%><tr><th>Pressure</th><th>Saturday</th><th>Sunday</th></tr>"
     html += "<tr><td><h3>" + indoorPressure + pressuredirectionicon + "</h3></td>"
-    html += "<td>" + saturdayicon + "</td>"
-    html += "<td>" + sundayicon + "</td></tr></table>"
+    # html += "<td>" + saturdayicon + "</td>"
+    # html += "<td>" + sundayicon + "</td></tr></table>"
 
     return html
 
