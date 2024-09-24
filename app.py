@@ -348,60 +348,58 @@ def gabbalocation():
 def weather():
 
     todayforecast = r.get("todayForecast")
-    #todayforecastword = jsonData['days'][0]['forecastWord']
     todaymax = r.get("todayMax")
     todaymin = r.get("todayMin")
 
     tomorrowforecast = r.get("tomorrowForecast")
-    #tomorrowforecastword = jsonData['days'][1]['forecastWord']
     tomorrowmax = r.get("tomorrowMax")
     tomorrowmin = r.get("tomorrowMin")
 
-    # saturday = jsonData['saturdayForecastWord']
-    # sunday = jsonData['sundayForecastWord']
-
+    saturday = r.get("saturdayCondition")
+    sunday = r.get("sundayCondition")
+    print(saturday)
    
-    # if saturday == "Partly cloudy":
-    #     saturdayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
-    # if saturday == "Few showers":
-    #     saturdayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
-    # if saturday == "Showers":
-    #     saturdayicon = "<span class='fs1 climacon showers' aria-hidden='true'></span>"
-    # if saturday == "Rain":
-    #     saturdayicon = "<span class='fs1 climacon rain' aria-hidden='true'></span>"
-    # if saturday == "Fine":
-    #     saturdayicon = "<span class='fs1 climacon sun' aria-hidden='true'></span>"
-    # if saturday == "Cloudy":
-    #     saturdayicon = "<span class='fs1 climacon cloud' aria-hidden='true'></span>"
-    # if saturday == "Wind rain":
-    #     saturdayicon = "<span class='fs1 climacon wind cloud' aria-hidden='true'></span>"
-    # if saturday == "Drizzle":
-    #     saturdayicon = "<span class='fs1 climacon drizzle' aria-hidden='true'></span>"
-    # if saturday == "Windy":
-    #     saturdayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
-    # if saturday == "Thunder":
-    #     saturdayicon = "<span class='fs1 climacon lightning' aria-hidden='true'></span>"
+    if saturday == "partly-cloudy":
+        saturdayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
+    if saturday == " few-showers":
+        saturdayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
+    if saturday == "showers":
+        saturdayicon = "<span class='fs1 climacon showers' aria-hidden='true'></span>"
+    if saturday == "rain":
+        saturdayicon = "<span class='fs1 climacon rain' aria-hidden='true'></span>"
+    if saturday == "fine":
+        saturdayicon = "<span class='fs1 climacon sun' aria-hidden='true'></span>"
+    if saturday == "cloudy":
+        saturdayicon = "<span class='fs1 climacon cloud' aria-hidden='true'></span>"
+    if saturday == "wind-rain":
+        saturdayicon = "<span class='fs1 climacon wind cloud' aria-hidden='true'></span>"
+    if saturday == "drizzle":
+        saturdayicon = "<span class='fs1 climacon drizzle' aria-hidden='true'></span>"
+    if saturday == "windy":
+        saturdayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
+    if saturday == "=thunder":
+        saturdayicon = "<span class='fs1 climacon lightning' aria-hidden='true'></span>"
 
-    # if sunday == "Partly cloudy":
-    #     sundayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
-    # if sunday == "Few showers":
-    #     sundayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
-    # if sunday == "Showers":
-    #     sundayicon = "<span class='fs1 climacon showers' aria-hidden='true'></span>"
-    # if sunday == "Rain":
-    #     sundayicon = "<span class='fs1 climacon rain' aria-hidden='true'></span>"
-    # if sunday == "Fine":
-    #     sundayicon = "<span class='fs1 climacon sun' aria-hidden='true'></span>"
-    # if sunday == "Cloudy":
-    #     sundayicon = "<span class='fs1 climacon cloud' aria-hidden='true'></span>"
-    # if sunday == "Wind rain":
-    #     sundayicon = "<span class='fs1 climacon wind cloud' aria-hidden='true'></span>"
-    # if sunday == "Drizzle":
-    #     sundayicon = "<span class='fs1 climacon drizzle' aria-hidden='true'></span>"
-    # if sunday == "Windy":
-    #     sundayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
-    # if sunday == "Thunder":
-    #     sundayicon = "<span class='fs1 climacon lightning' aria-hidden='true'></span>"
+    if sunday == "partly-cloudy":
+        sundayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
+    if sunday == "few-showers":
+        sundayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
+    if sunday == "showers":
+        sundayicon = "<span class='fs1 climacon showers' aria-hidden='true'></span>"
+    if sunday == "rain":
+        sundayicon = "<span class='fs1 climacon rain' aria-hidden='true'></span>"
+    if sunday == "fine":
+        sundayicon = "<span class='fs1 climacon sun' aria-hidden='true'></span>"
+    if sunday == "cloudy":
+        sundayicon = "<span class='fs1 climacon cloud' aria-hidden='true'></span>"
+    if sunday == "wind-rain":
+        sundayicon = "<span class='fs1 climacon wind cloud' aria-hidden='true'></span>"
+    if sunday == "drizzle":
+        sundayicon = "<span class='fs1 climacon drizzle' aria-hidden='true'></span>"
+    if sunday == "windy":
+        sundayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
+    if sunday == "thunder":
+        sundayicon = "<span class='fs1 climacon lightning' aria-hidden='true'></span>"
 
     pressuredirection = r.get("pressureDirection")
     if pressuredirection == "up":
@@ -429,8 +427,8 @@ def weather():
     html +=  tomorrowforecast + "<br>"
     html += "<br><table width=100%><tr><th>Pressure</th><th>Saturday</th><th>Sunday</th></tr>"
     html += "<tr><td><h3>" + indoorPressure + pressuredirectionicon + "</h3></td>"
-    # html += "<td>" + saturdayicon + "</td>"
-    # html += "<td>" + sundayicon + "</td></tr></table>"
+    html += "<td>" + saturdayicon + "</td>"
+    html += "<td>" + sundayicon + "</td></tr></table>"
 
     return html
 

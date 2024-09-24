@@ -1,1 +1,2 @@
-flask --app app --debug run
+flask --app app --debug run --port 5002
+
