@@ -187,12 +187,10 @@ def simplicity():
     simplicityDave = r.get("simplicityDave")
     simplicityGabba = r.get("simplicityGabba")
     homeloanbalance = r.get('homeloanbalance')
-    punakaikicurrentvalue = "9592"
+    punakaikicurrentvalue = "10776"
     homeloanmonths = homeloanbalance.split(".")[0].replace("-$", "").replace(",", "")
     homeloanmonths = int(homeloanmonths) / 4000
     homeloanTarget= date.today() + relativedelta(months=+int(homeloanmonths))
-
-
 
     html = "Home Loan:<strong> " +  homeloanbalance + "</strong><br>Forecast end date: <strong>" + homeloanTarget.strftime("%b %Y") + "</strong><br><br>Kiwisaver Dave:<strong> " + simplicityDave + "<br></strong>Kiwisaver Gabba:<strong> " + simplicityGabba + "<br></strong>Punakaiki:<strong> $" + punakaikicurrentvalue  + "</strong> <br> Retiring in <strong>" + str(months_until_retirement()) + "</strong> months" 
 
@@ -356,12 +354,13 @@ def weather():
     tomorrowmin = r.get("tomorrowMin")
 
     saturday = r.get("saturdayCondition")
+    print(saturday)
     sunday = r.get("sundayCondition")
     print(saturday)
    
     if saturday == "partly-cloudy":
         saturdayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
-    if saturday == " few-showers":
+    if saturday == "few-showers":
         saturdayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
     if saturday == "showers":
         saturdayicon = "<span class='fs1 climacon showers' aria-hidden='true'></span>"
@@ -377,7 +376,7 @@ def weather():
         saturdayicon = "<span class='fs1 climacon drizzle' aria-hidden='true'></span>"
     if saturday == "windy":
         saturdayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
-    if saturday == "=thunder":
+    if saturday == "thunder":
         saturdayicon = "<span class='fs1 climacon lightning' aria-hidden='true'></span>"
 
     if sunday == "partly-cloudy":
