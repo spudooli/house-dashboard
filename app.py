@@ -152,15 +152,15 @@ def the100x60project():
 
 @app.route("/the100x60weeks")
 def the100x60weeks():
-    d1 = date.today()
-    d2 = date(2027,11,17)
-    weeks = (d2-d1).days//7
-    the100x60project = int(r.get('total100x60'))
-    averageperweektogo = int("100000") - int(the100x60project)
-    averageperweektogo = int(averageperweektogo) / weeks
-    averageperweektogo = str(averageperweektogo)
+    # d1 = date.today()
+    # d2 = date(2027,11,17)
+    # weeks = (d2-d1).days//7
+    # the100x60project = int(r.get('total100x60'))
+    # averageperweektogo = int("100000") - int(the100x60project)
+    # averageperweektogo = int(averageperweektogo) / weeks
+    # averageperweektogo = str(averageperweektogo)
     totalsavings = int(r.get('totalsavings'))
-    html = "Average required per week: <strong>$" + averageperweektogo.split(".")[0] + "</strong><br /> <br />Total Retirement Savings: <strong>$" + "{:,}".format(totalsavings) + "</strong>"
+    html = "<br>Total Retirement Savings: <strong>$" + "{:,}".format(totalsavings) + "</strong>"
     return html
 
 @app.route("/rainradar")
@@ -187,12 +187,12 @@ def simplicity():
     simplicityDave = r.get("simplicityDave")
     simplicityGabba = r.get("simplicityGabba")
     homeloanbalance = r.get('homeloanbalance')
-    punakaikicurrentvalue = "10776"
+    punakaikicurrentvalue = "10811"
     homeloanmonths = homeloanbalance.split(".")[0].replace("-$", "").replace(",", "")
     homeloanmonths = int(homeloanmonths) / 4000
     homeloanTarget= date.today() + relativedelta(months=+int(homeloanmonths))
 
-    html = "Home Loan:<strong> " +  homeloanbalance + "</strong><br>Forecast end date: <strong>" + homeloanTarget.strftime("%b %Y") + "</strong><br><br>Kiwisaver Dave:<strong> " + simplicityDave + "<br></strong>Kiwisaver Gabba:<strong> " + simplicityGabba + "<br></strong>Punakaiki:<strong> $" + punakaikicurrentvalue  + "</strong> <br> Retiring in <strong>" + str(months_until_retirement()) + "</strong> months" 
+    html = "Home Loan:<strong> " +  homeloanbalance + "</strong><br>Forecast end date: <strong>" + homeloanTarget.strftime("%b %Y") + "</strong><br><br>Kiwisaver Dave:<strong> $" + "{:,}".format(int(simplicityDave)) + "<br></strong>Kiwisaver Gabba:<strong> $" + "{:,}".format(int(simplicityGabba)) + "<br></strong>Punakaiki:<strong> $" + "{:,}".format(int(punakaikicurrentvalue))  + "</strong> <br> Retiring in <strong>" + str(months_until_retirement()) + "</strong> months" 
 
     # Calculate the100x60project balance here only because I have most of the values needed already
     sharesiesbalance = int(r.get('sharesies'))
