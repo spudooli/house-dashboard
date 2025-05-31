@@ -475,4 +475,10 @@ h3.session {
         /*vertical-align: middle; */
       }      
 
+
+.mapgrayscale {
+  filter: grayscale(50%);
+}
+
+      
 /* JASE LOVES YOU ALL */
