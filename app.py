@@ -188,7 +188,7 @@ def simplicity():
     simplicityGabba = r.get("simplicityGabba")
     homeloanbalance = r.get('homeloanbalance')
     punakaikicurrentvalue = "10811"
-    homeloanmonths = homeloanbalance.split(".")[0].replace("-$", "").replace(",", "")
+    homeloanmonths = homeloanbalance.split(".")[0].replace("-", "").replace(",", "")
     homeloanmonths = int(homeloanmonths) / 4000
     homeloanTarget= date.today() + relativedelta(months=+int(homeloanmonths))
 
