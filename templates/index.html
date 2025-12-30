@@ -55,7 +55,7 @@
         <p class='stat_val' id='outsidenow'></p>
         <p class='stat_measure' id='outsidehighslows'>
       </li>
-  
+
       <li>
         <h2>BMW i3 km</h2>
         <p class='stat_val' id='i3range'></p>
@@ -184,7 +184,7 @@
         $('#spapooltemperature').html(data);
       });
     }
-    
+
     function websitecomments() {
       $.get('websitecomments', function (data) {
         $('#websitecomments').html(data);
@@ -308,7 +308,7 @@
 
       });
     }
-    
+
     function weather() {
       $.get('weather', function (data) {
         $('#weather').html(data);
@@ -340,7 +340,7 @@
       setInterval(getinsidenow, 120000);
     });
 
-    
+
     $(document).ready(function () {
       setInterval(bmwi3range, 300000);
     });
@@ -434,7 +434,7 @@
     });
 
     $(document).ready(function () {
-      setInterval(weather, 4500000);
+      setInterval(weather, 1800000);
     });
 
     $(document).ready(function () {
