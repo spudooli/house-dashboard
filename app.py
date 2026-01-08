@@ -187,7 +187,7 @@ def simplicity():
     simplicityDave = r.get("simplicityDave")
     simplicityGabba = r.get("simplicityGabba")
     homeloanbalance = r.get('homeloanbalance')
-    punakaikicurrentvalue = "11150"
+    punakaikicurrentvalue = "11336"
     homeloanmonths = homeloanbalance.split(".")[0].replace("-", "").replace(",", "")
     homeloanmonths = int(homeloanmonths) / 4000
     homeloanTarget= date.today() + relativedelta(months=+int(homeloanmonths))
@@ -422,7 +422,7 @@ def weather():
     html += "Max: " + todaymax + "&deg;  Min: " + todaymin + "&deg;<br><br>"
     html += "<strong>Tomorrow</strong> &nbsp; &nbsp; &nbsp; Max: " +  tomorrowmax + "&deg;  Min: " + tomorrowmin + "&deg;<br>"
     html +=  tomorrowforecast + "<br>"
-    html += "<br><table width=100%><tr><th>Pressure</th><th>Saturday</th><th>Sunday</th></tr>"
+    html += "<br><table width=100%><tr><td>Pressure</td><td>Saturday</td><td>Sunday</td></tr>"
     html += "<tr><td><h3>" + indoorPressure + pressuredirectionicon + "</h3></td>"
     html += "<td>" + saturdayicon + "</td>"
     html += "<td>" + sundayicon + "</td></tr></table>"
