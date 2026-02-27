@@ -16,7 +16,7 @@ from dateutil.relativedelta import relativedelta
 
 app = Flask(__name__)
 
-r = redis.StrictRedis('localhost', 6379, charset="utf-8", decode_responses=True)
+r = redis.StrictRedis('localhost', 6379, encoding="utf-8", decode_responses=True)
 
 mysql = MySQL()
 
@@ -204,16 +204,17 @@ def simplicity():
 
     broker = "192.168.1.2"
     port = 1883
-    client1 = paho.Client("dashboardthe100x60project")
+    client1 = paho.Client(paho.CallbackAPIVersion.VERSION2, "dashboardthe100x60project")
     client1.connect(broker, port)
 
-    def on_connect(client, userdata, flags, rc):
-        print("Connected With Result Code "+rc)
+    def on_connect(client, userdata, flags, reason_code, properties):
+        print("Connected With Result Code " + str(reason_code))
 
+    client1.on_connect = on_connect
     client1.publish("house/money/total100x60", the100x60projectbalance)
     #client1.publish("house/money/networth", networth)
     client1.publish("house/money/totalsavings", totalsavings)
-    client1.disconnect
+    client1.disconnect()
 
     return html
 
