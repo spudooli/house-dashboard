@@ -5,10 +5,6 @@
   <title>Spudooli House</title>
   <link rel="stylesheet" href={{ url_for('static', filename='climacons-font.css' ) }} />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!-- <script src="scope.js" type="text/javascript"></script> -->
-
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js" type="text/javascript"></script> -->
-  <!-- <script src={{ url_for('static', filename='mqtt.js' ) }} type="text/javascript"></script> -->
   <link href={{ url_for('static', filename='all.css' ) }} media="screen" rel="stylesheet" type="text/css" />
 </head>
 
@@ -193,18 +189,6 @@
       });
     }
 
-    function bmwi3range() {
-      fetch('i3rangeremaining').then(r => r.text()).then(data => {
-        document.getElementById('i3range').textContent = data;
-      });
-    }
-
-    function i3chargingstatus() {
-      fetch('i3chargingstatus').then(r => r.text()).then(data => {
-        document.getElementById('i3chargingstatus').innerHTML = data;
-      });
-    }
-
     function the100x60weeks() {
       fetch('the100x60weeks').then(r => r.text()).then(data => {
         document.getElementById('the100x60weeks').innerHTML = data;
@@ -229,15 +213,73 @@
       });
     }
 
+    function storeTempReading(key, raw) {
+      const v = parseFloat(raw);
+      if (isNaN(v)) return;
+      const history = JSON.parse(localStorage.getItem(key) || '[]');
+      history.push({ t: Date.now(), v });
+      if (history.length > 144) history.splice(0, history.length - 144);
+      localStorage.setItem(key, JSON.stringify(history));
+    }
+
+    function renderTempChart(anchorId, canvasId, storageKey) {
+      const history = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      if (history.length < 2) return;
+      const li = document.getElementById(anchorId).closest('li');
+      let canvas = document.getElementById(canvasId);
+      if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.id = canvasId;
+        canvas.style.cssText = 'position:absolute;top:0;left:0;pointer-events:none;opacity:0.25;z-index:0';
+        li.style.position = 'relative';
+        li.insertBefore(canvas, li.firstChild);
+      }
+      const marginH = 24;
+      canvas.style.left = marginH + 'px';
+      canvas.width = li.offsetWidth - marginH * 2;
+      canvas.height = li.offsetHeight;
+      const w = canvas.width, h = canvas.height;
+      const chartTop = h / 4, chartH = h / 2;
+      const values = history.map(d => d.v);
+      const min = Math.min(...values), max = Math.max(...values);
+      const range = max - min || 1;
+      const pts = history.map((d, i) => ({
+        x: (i / (history.length - 1)) * w,
+        y: chartTop + chartH - ((d.v - min) / range) * chartH,
+      }));
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, w, h);
+      ctx.strokeStyle = '#D0E700';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (let i = 1; i < pts.length; i++) {
+        const p0 = pts[Math.max(0, i - 2)];
+        const p1 = pts[i - 1];
+        const p2 = pts[i];
+        const p3 = pts[Math.min(pts.length - 1, i + 1)];
+        ctx.bezierCurveTo(
+          p1.x + (p2.x - p0.x) / 6, p1.y + (p2.y - p0.y) / 6,
+          p2.x - (p3.x - p1.x) / 6, p2.y - (p3.y - p1.y) / 6,
+          p2.x, p2.y
+        );
+      }
+      ctx.stroke();
+    }
+
     function getoutsidenow() {
       fetch('outdoortemperature').then(r => r.text()).then(data => {
         document.getElementById('outsidenow').textContent = data;
+        storeTempReading('outside_temp_history', data);
+        renderTempChart('outsidenow', 'outside_temp_chart', 'outside_temp_history');
       });
     }
 
     function getinsidenow() {
       fetch('indoortemperature').then(r => r.text()).then(data => {
         document.getElementById('insidenow').innerHTML = data;
+        storeTempReading('inside_temp_history', data);
+        renderTempChart('insidenow', 'inside_temp_chart', 'inside_temp_history');
       });
     }
 
@@ -330,35 +372,35 @@
     }
 
     const POLLS = [
-      { fn: power,              interval:     6_000 },
-      { fn: gettime,            interval:    10_000 },
-      { fn: hotwatercylinder,   interval:    30_150 },
-      { fn: spapoolheating,     interval:    30_150 },
-      { fn: websitecomments,    interval:    60_000 },
-      { fn: whereisgabba,       interval:    60_000 },
-      { fn: whereisdave,        interval:    60_000 },
-      { fn: getinsidenow,       interval:   120_000 },
-      { fn: bmwi3range,         interval:   300_000 },
-      { fn: i3chargingstatus,   interval:   300_000 },
-      { fn: gardenshed,         interval:   300_000 },
-      { fn: spapooltemperature, interval:   300_000 },
-      { fn: getoutsidenow,      interval:   600_000 },
-      { fn: outsidehighslows,   interval:   600_000 },
-      { fn: sharesies,          interval:   600_000 },
-      { fn: insidehighslows,    interval:   601_100 },
-      { fn: simplicity,         interval:   900_000 },
-      { fn: the100x60project,   interval:   900_000 },
-      { fn: the100x60weeks,     interval:   900_000 },
-      { fn: rainradar,          interval:   900_000 },
-      { fn: isobars,            interval:   900_000 },
-      { fn: weather,            interval: 1_800_000 },
-      { fn: getdate,            interval: 3_600_000 },
-      { fn: bankbalance,        interval: 3_600_000 },
+      { fn: power, interval: 6_000 },
+      { fn: gettime, interval: 10_000 },
+      { fn: hotwatercylinder, interval: 30_150 },
+      { fn: spapoolheating, interval: 30_150 },
+      { fn: websitecomments, interval: 60_000 },
+      { fn: whereisgabba, interval: 60_000 },
+      { fn: whereisdave, interval: 60_000 },
+      { fn: getinsidenow, interval: 120_000 },
+      { fn: gardenshed, interval: 300_000 },
+      { fn: spapooltemperature, interval: 300_000 },
+      { fn: getoutsidenow, interval: 300_000 },
+      { fn: outsidehighslows, interval: 600_000 },
+      { fn: sharesies, interval: 600_000 },
+      { fn: insidehighslows, interval: 601_100 },
+      { fn: simplicity, interval: 900_000 },
+      { fn: the100x60project, interval: 900_000 },
+      { fn: the100x60weeks, interval: 900_000 },
+      { fn: rainradar, interval: 900_000 },
+      { fn: isobars, interval: 900_000 },
+      { fn: weather, interval: 1_800_000 },
+      { fn: getdate, interval: 3_600_000 },
+      { fn: bankbalance, interval: 3_600_000 },
       { fn: bankbalancehistory, interval: 7_200_000 },
-      { fn: thesun,             interval:43_200_000 },
+      { fn: thesun, interval: 43_200_000 },
     ];
 
     window.onload = () => {
+      renderTempChart('outsidenow', 'outside_temp_chart', 'outside_temp_history');
+      renderTempChart('insidenow', 'inside_temp_chart', 'inside_temp_history');
       POLLS.forEach(({ fn, interval }) => {
         fn();
         setInterval(fn, interval);
