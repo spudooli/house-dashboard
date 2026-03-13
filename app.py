@@ -60,7 +60,7 @@ def dashboard():
 
 @app.route("/indoortemperature")
 def indoorTemperature():
-    indoortemp = r.get('indoorTemperature') + "&deg;"
+    indoortemp = r.get('indoorTemperature')
     return indoortemp
 
 @app.route("/power")
