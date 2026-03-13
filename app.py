@@ -84,15 +84,7 @@ def bankbalancehistory():
     rows = []  
     for row in last75rows:
         rows.append(str(row[0]))
-    balancehistorylist = ','.join(rows)
-    html = "<span class='bankbalancehistory'>" + balancehistorylist
-    html += "</span><script type='text/javascript'>"
-    html += "$(function() {"
-    html += "$('.inlinesparkline').sparkline();"
-    html += "$('.bankbalancehistory').sparkline('html', {type: 'bar', barColor: '#D0E700'} );"
-    html += "});"
-    html += "</script>"
-    return html
+    return ','.join(rows)
 
 @app.route("/outdoortemperature")
 def outdoorTemperature():

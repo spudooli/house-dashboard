@@ -8,9 +8,7 @@
   <!-- <script src="scope.js" type="text/javascript"></script> -->
 
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js" type="text/javascript"></script> -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
   <!-- <script src={{ url_for('static', filename='mqtt.js' ) }} type="text/javascript"></script> -->
-  <script src={{ url_for('static', filename='sparkline.js' ) }} type="text/javascript"></script>
   <link href={{ url_for('static', filename='all.css' ) }} media="screen" rel="stylesheet" type="text/css" />
 </head>
 
@@ -136,344 +134,236 @@
 
   <script>
     function gettime() {
-      $.get('gettime', function (data) {
-        $('#current_time').text(data);
+      fetch('gettime').then(r => r.text()).then(data => {
+        document.getElementById('current_time').textContent = data;
       });
     }
 
     function getdate() {
-      $.get('getdate', function (data) {
-        $('#currentdate').text(data);
+      fetch('getdate').then(r => r.text()).then(data => {
+        document.getElementById('currentdate').textContent = data;
       });
     }
 
     function simplicity() {
-      $.get('simplicity', function (data) {
-        $('#simplicity').html(data);
-
+      fetch('simplicity').then(r => r.text()).then(data => {
+        document.getElementById('simplicity').innerHTML = data;
       });
     }
 
-
     // function gardenlights() {
-    //   $.get('gardenlights', function (data) {
-    //     $('#gardenlights').html(data);
+    //   fetch('gardenlights').then(r => r.text()).then(data => {
+    //     document.getElementById('gardenlights').innerHTML = data;
     //   });
     // }
 
     // function verandahlights() {
-    //   $.get('verandahlights', function (data) {
-    //     $('#verandahlights').html(data);
+    //   fetch('verandahlights').then(r => r.text()).then(data => {
+    //     document.getElementById('verandahlights').innerHTML = data;
     //   });
     // }
 
-    function osmc() {
-      $.get('osmc', function (data) {
-        $('#osmc').html(data);
-      });
-    }
+    // function osmc() {
+    //   fetch('osmc').then(r => r.text()).then(data => {
+    //     document.getElementById('osmc').innerHTML = data;
+    //   });
+    // }
 
     function gardenshed() {
-      $.get('gardenshed', function (data) {
-        $('#gardenshed').html(data);
+      fetch('gardenshed').then(r => r.text()).then(data => {
+        document.getElementById('gardenshed').innerHTML = data;
       });
     }
 
     function spapooltemperature() {
-      $.get('spapooltemperature', function (data) {
-        $('#spapooltemperature').html(data);
+      fetch('spapooltemperature').then(r => r.text()).then(data => {
+        document.getElementById('spapooltemperature').innerHTML = data;
       });
     }
 
     function websitecomments() {
-      $.get('websitecomments', function (data) {
-        $('#websitecomments').html(data);
+      fetch('websitecomments').then(r => r.text()).then(data => {
+        document.getElementById('websitecomments').innerHTML = data;
       });
     }
 
     function the100x60project() {
-      $.get('the100x60project', function (data) {
-        $('#the100x60project').text(data);
+      fetch('the100x60project').then(r => r.text()).then(data => {
+        document.getElementById('the100x60project').textContent = data;
       });
     }
 
     function bmwi3range() {
-      $.get('i3rangeremaining', function (data) {
-        $('#i3range').text(data);
+      fetch('i3rangeremaining').then(r => r.text()).then(data => {
+        document.getElementById('i3range').textContent = data;
       });
     }
 
     function i3chargingstatus() {
-      $.get('i3chargingstatus', function (data) {
-        $('#i3chargingstatus').html(data);
+      fetch('i3chargingstatus').then(r => r.text()).then(data => {
+        document.getElementById('i3chargingstatus').innerHTML = data;
       });
     }
 
     function the100x60weeks() {
-      $.get('the100x60weeks', function (data) {
-        $('#the100x60weeks').html(data);
+      fetch('the100x60weeks').then(r => r.text()).then(data => {
+        document.getElementById('the100x60weeks').innerHTML = data;
       });
     }
 
     function sharesies() {
-      $.get('sharesies', function (data) {
-        $('#sharesies').html(data);
-      });
-    }
-
-    function getpower() {
-      $.get('', function (data) {
-        $('#current_power').text(data);
+      fetch('sharesies').then(r => r.text()).then(data => {
+        document.getElementById('sharesies').innerHTML = data;
       });
     }
 
     function hotwatercylinder() {
-      $.get('hotwatercylinder', function (data) {
-        $('#hotwatercylinder').html(data);
+      fetch('hotwatercylinder').then(r => r.text()).then(data => {
+        document.getElementById('hotwatercylinder').innerHTML = data;
       });
     }
 
     function spapoolheating() {
-      $.get('spapoolheating', function (data) {
-        $('#spapoolheating').html(data);
+      fetch('spapoolheating').then(r => r.text()).then(data => {
+        document.getElementById('spapoolheating').innerHTML = data;
       });
     }
 
     function getoutsidenow() {
-      $.get('outdoortemperature', function (data) {
-        $('#outsidenow').text(data);
-
+      fetch('outdoortemperature').then(r => r.text()).then(data => {
+        document.getElementById('outsidenow').textContent = data;
       });
     }
 
     function getinsidenow() {
-      $.get('indoortemperature', function (data) {
-        $('#insidenow').html(data);
+      fetch('indoortemperature').then(r => r.text()).then(data => {
+        document.getElementById('insidenow').innerHTML = data;
       });
     }
 
     function outsidehighslows() {
-      $.get('outsidehighslows', function (data) {
-        $('#outsidehighslows').html(data);
-
+      fetch('outsidehighslows').then(r => r.text()).then(data => {
+        document.getElementById('outsidehighslows').innerHTML = data;
       });
     }
 
     function insidehighslows() {
-      $.get('insidehighslows', function (data) {
-        $('#insidehighslows').html(data);
-
+      fetch('insidehighslows').then(r => r.text()).then(data => {
+        document.getElementById('insidehighslows').innerHTML = data;
       });
     }
 
-
     function whereisgabba() {
-      $.get('gabbalocation', function (data) {
-        $('#where_is_gabba').html(data);
-
+      fetch('gabbalocation').then(r => r.text()).then(data => {
+        document.getElementById('where_is_gabba').innerHTML = data;
       });
     }
 
     function whereisdave() {
-      $.get('/davelocation', function (data) {
-        $('#where_is_dave').html(data);
-
+      fetch('/davelocation').then(r => r.text()).then(data => {
+        document.getElementById('where_is_dave').innerHTML = data;
       });
     }
 
     function rainradar() {
-      $.get('rainradar', function (data) {
-        $('#rainradar').html(data);
-
+      fetch('rainradar').then(r => r.text()).then(data => {
+        document.getElementById('rainradar').innerHTML = data;
       });
     }
 
     function isobars() {
-      $.get('isobars', function (data) {
-        $('#isobars').html(data);
-
+      fetch('isobars').then(r => r.text()).then(data => {
+        document.getElementById('isobars').innerHTML = data;
       });
     }
 
     function bankbalance() {
-      $.get('bankbalance', function (data) {
-        $('#bankbalance').text(data);
-
+      fetch('bankbalance').then(r => r.text()).then(data => {
+        document.getElementById('bankbalance').textContent = data;
       });
     }
 
     function thesun() {
-      $.get('thesun', function (data) {
-        $('#thesun').html(data);
-
+      fetch('thesun').then(r => r.text()).then(data => {
+        document.getElementById('thesun').innerHTML = data;
       });
     }
 
     function weather() {
-      $.get('weather', function (data) {
-        $('#weather').html(data);
+      fetch('weather').then(r => r.text()).then(data => {
+        document.getElementById('weather').innerHTML = data;
       });
     }
 
     function power() {
-      $.get('power', function (data) {
-        $('#current_power').text(data);
+      fetch('power').then(r => r.text()).then(data => {
+        document.getElementById('current_power').textContent = data;
       });
     }
 
     function bankbalancehistory() {
-      $.get('bankbalancehistory', function (data) {
-        $('#bankbalancehistory').html(data);
+      fetch('bankbalancehistory').then(r => r.text()).then(data => {
+        const values = data.split(',').map(Number);
+        const container = document.getElementById('bankbalancehistory');
+        container.innerHTML = '';
+        const h = 20;
+        const canvas = document.createElement('canvas');
+        canvas.style.display = 'block';
+        canvas.style.width = '100%';
+        canvas.height = h;
+        container.appendChild(canvas);
+        const w = canvas.offsetWidth;
+        canvas.width = w;
+        const barWidth = Math.floor(w / values.length);
+        const ctx = canvas.getContext('2d');
+        const min = Math.min(0, ...values);
+        const max = Math.max(0, ...values);
+        const range = max - min || 1;
+        const zeroY = Math.round((max / range) * h);
+        values.forEach((v, i) => {
+          const barH = Math.max(1, Math.abs(Math.round((v / range) * h)));
+          const y = v >= 0 ? zeroY - barH : zeroY;
+          ctx.fillStyle = v >= 0 ? '#D0E700' : '#FF4444';
+          ctx.fillRect(i * barWidth, y, barWidth - 1, barH);
+        });
       });
     }
 
-    $(document).ready(function () {
-      setInterval(hotwatercylinder, 30150);
-    });
+    const POLLS = [
+      { fn: power,              interval:     6_000 },
+      { fn: gettime,            interval:    10_000 },
+      { fn: hotwatercylinder,   interval:    30_150 },
+      { fn: spapoolheating,     interval:    30_150 },
+      { fn: websitecomments,    interval:    60_000 },
+      { fn: whereisgabba,       interval:    60_000 },
+      { fn: whereisdave,        interval:    60_000 },
+      { fn: getinsidenow,       interval:   120_000 },
+      { fn: bmwi3range,         interval:   300_000 },
+      { fn: i3chargingstatus,   interval:   300_000 },
+      { fn: gardenshed,         interval:   300_000 },
+      { fn: spapooltemperature, interval:   300_000 },
+      { fn: getoutsidenow,      interval:   600_000 },
+      { fn: outsidehighslows,   interval:   600_000 },
+      { fn: sharesies,          interval:   600_000 },
+      { fn: insidehighslows,    interval:   601_100 },
+      { fn: simplicity,         interval:   900_000 },
+      { fn: the100x60project,   interval:   900_000 },
+      { fn: the100x60weeks,     interval:   900_000 },
+      { fn: rainradar,          interval:   900_000 },
+      { fn: isobars,            interval:   900_000 },
+      { fn: weather,            interval: 1_800_000 },
+      { fn: getdate,            interval: 3_600_000 },
+      { fn: bankbalance,        interval: 3_600_000 },
+      { fn: bankbalancehistory, interval: 7_200_000 },
+      { fn: thesun,             interval:43_200_000 },
+    ];
 
-    $(document).ready(function () {
-      setInterval(power, 6000);
-    });
-
-
-    $(document).ready(function () {
-      setInterval(getinsidenow, 120000);
-    });
-
-
-    $(document).ready(function () {
-      setInterval(bmwi3range, 300000);
-    });
-
-    $(document).ready(function () {
-      setInterval(i3chargingstatus, 300000);
-    });
-
-    $(document).ready(function () {
-      setInterval(spapoolheating, 30150);
-    });
-
-    $(document).ready(function () {
-      setInterval(gettime, 10000);
-    });
-
-    $(document).ready(function () {
-      setInterval(getdate, 3600000);
-    });
-
-    $(document).ready(function () {
-      setInterval(simplicity, 900000);
-    });
-
-    // $(document).ready(function () {
-    //   setInterval(gardenlights, 300000);
-    // });
-
-    $(document).ready(function () {
-      setInterval(gardenshed, 300000);
-    });
-
-    $(document).ready(function () {
-      setInterval(spapooltemperature, 300000);
-    });
-
-    $(document).ready(function () {
-      setInterval(websitecomments, 60000);
-    });
-
-    // $(document).ready(function () {
-    //   setInterval(verandahlights, 300000);
-    // });
-
-    // $(document).ready(function () {
-    //   setInterval(osmc, 300000);
-    // });
-
-    $(document).ready(function () {
-      setInterval(sharesies, 600000);
-    });
-
-    $(document).ready(function () {
-      setInterval(the100x60project, 900000);
-    });
-
-    $(document).ready(function () {
-      setInterval(the100x60weeks, 900000);
-    });
-
-    $(document).ready(function () {
-      setInterval(outsidehighslows, 600000);
-    });
-
-    $(document).ready(function () {
-      setInterval(getoutsidenow, 600000);
-    });
-
-    $(document).ready(function () {
-      setInterval(insidehighslows, 601100);
-    });
-
-    $(document).ready(function () {
-      setInterval(whereisgabba, 60000);
-    });
-
-    $(document).ready(function () {
-      setInterval(whereisdave, 60000);
-    });
-
-    $(document).ready(function () {
-      setInterval(rainradar, 900000);
-    });
-
-    $(document).ready(function () {
-      setInterval(isobars, 900000);
-    });
-
-    $(document).ready(function () {
-      setInterval(bankbalance, 3600000);
-    });
-
-    $(document).ready(function () {
-      setInterval(weather, 1800000);
-    });
-
-    $(document).ready(function () {
-      setInterval(thesun, 43200000);
-    });
-
-    $(document).ready(function () {
-      setInterval(bankbalancehistory, 7200000);
-    });
-
-    function start() {
-      getinsidenow();
-      getoutsidenow()
-      outsidehighslows();
-      insidehighslows();
-      weather();
-      whereisgabba();
-      whereisdave();
-      bankbalancehistory();
-      simplicity();
-      sharesies();
-      gettime();
-      getdate();
-      rainradar();
-      isobars();
-      bankbalance()
-      the100x60project();
-      the100x60weeks();
-      bmwi3range();
-      i3chargingstatus();
-      thesun();
-      gardenshed();
-      spapooltemperature();
-      websitecomments();
-      // verandahlights();
-      // osmc();
-    }
-
-    window.onload = start;
+    window.onload = () => {
+      POLLS.forEach(({ fn, interval }) => {
+        fn();
+        setInterval(fn, interval);
+      });
+    };
   </script>
 
 </body>
