@@ -222,7 +222,7 @@
       localStorage.setItem(key, JSON.stringify(history));
     }
 
-    function renderTempChart(anchorId, canvasId, storageKey) {
+    function renderTempChart(anchorId, canvasId, storageKey, minTemp, maxTemp) {
       const history = JSON.parse(localStorage.getItem(storageKey) || '[]');
       if (history.length < 2) return;
       const li = document.getElementById(anchorId).closest('li');
@@ -240,12 +240,10 @@
       canvas.height = li.offsetHeight;
       const w = canvas.width, h = canvas.height;
       const chartTop = h / 4, chartH = h / 2;
-      const values = history.map(d => d.v);
-      const min = Math.min(...values), max = Math.max(...values);
-      const range = max - min || 1;
+      const range = maxTemp - minTemp;
       const pts = history.map((d, i) => ({
         x: (i / (history.length - 1)) * w,
-        y: chartTop + chartH - ((d.v - min) / range) * chartH,
+        y: chartTop + chartH - ((d.v - minTemp) / range) * chartH,
       }));
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, w, h);
@@ -271,7 +269,7 @@
       fetch('outdoortemperature').then(r => r.text()).then(data => {
         document.getElementById('outsidenow').textContent = data;
         storeTempReading('outside_temp_history', data);
-        renderTempChart('outsidenow', 'outside_temp_chart', 'outside_temp_history');
+        renderTempChart('outsidenow', 'outside_temp_chart', 'outside_temp_history', 12, 32);
       });
     }
 
@@ -279,7 +277,7 @@
       fetch('indoortemperature').then(r => r.text()).then(data => {
         document.getElementById('insidenow').innerHTML = data;
         storeTempReading('inside_temp_history', data);
-        renderTempChart('insidenow', 'inside_temp_chart', 'inside_temp_history');
+        renderTempChart('insidenow', 'inside_temp_chart', 'inside_temp_history', 16, 26);
       });
     }
 
