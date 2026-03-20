@@ -375,8 +375,6 @@
       { fn: hotwatercylinder, interval: 30_150 },
       { fn: spapoolheating, interval: 30_150 },
       { fn: websitecomments, interval: 60_000 },
-      { fn: whereisgabba, interval: 60_000 },
-      { fn: whereisdave, interval: 60_000 },
       { fn: getinsidenow, interval: 120_000 },
       { fn: gardenshed, interval: 300_000 },
       { fn: spapooltemperature, interval: 300_000 },
@@ -403,6 +401,15 @@
         fn();
         setInterval(fn, interval);
       });
+
+      whereisdave();
+      whereisgabba();
+      const locationStream = new EventSource('/location-stream');
+      locationStream.onmessage = (e) => {
+        const { who } = JSON.parse(e.data);
+        if (who === 'dave') whereisdave();
+        else if (who === 'gabba') whereisgabba();
+      };
     };
   </script>
 

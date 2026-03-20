@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, Response
 from flask import render_template
 from datetime import datetime as dt
 from datetime import datetime
@@ -332,6 +332,26 @@ def gabbalocation():
     gabbaupdated = str(gabbalocation[1])
     html = "<img src='/static/location/gabba_map_" + str(gabbalocation[8]) + ".png' class='mapgrayscale'><p class='stat_measure' id='current_date' >Updated:" + gabbaupdated + "</p>"
     return html
+
+@app.route("/location-stream")
+def location_stream():
+    def event_stream():
+        pubsub = r.pubsub()
+        pubsub.subscribe('location:dave', 'location:gabba')
+        try:
+            while True:
+                msg = pubsub.get_message(timeout=30)
+                if msg and msg['type'] == 'message':
+                    channel = msg['channel']
+                    who = 'dave' if channel == 'location:dave' else 'gabba'
+                    yield f"data: {json.dumps({'who': who})}\n\n"
+                else:
+                    yield ": keepalive\n\n"
+        except GeneratorExit:
+            pubsub.unsubscribe()
+            pubsub.close()
+    return Response(event_stream(), mimetype='text/event-stream',
+                    headers={'Cache-Control': 'no-cache', 'X-Accel-Buffering': 'no'})
 
 @app.route("/weather")
 def weather():
