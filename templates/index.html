@@ -76,7 +76,7 @@
       <li>
         <h2>The $100k by 60 Project</h2>
         <p class='stat_val' id='the100x60project'></p>
-        <p class="stat_measure" id="the100x60weeks"></p>
+        <p class="stat_measure" id="the100x60weeks" style="margin-top:18px"></p>
 
       </li>
 
@@ -141,9 +141,26 @@
       });
     }
 
+    function thingsRow(label, value, valueColor, sub) {
+      return `<div style="display:flex;justify-content:space-between;align-items:baseline;padding:2px 0">
+        <span>${label}</span>
+        <div style="text-align:right">
+          <div style="color:${valueColor || '#D0E700'}">${value}</div>
+          ${sub ? `<div style="font-size:0.8em;color:#888;margin-top:2px">${sub}</div>` : ''}
+        </div>
+      </div>`;
+    }
+
     function simplicity() {
-      fetch('simplicity').then(r => r.text()).then(data => {
-        document.getElementById('simplicity').innerHTML = data;
+      fetch('simplicity').then(r => r.json()).then(data => {
+        const loanNum = parseInt(data.homeloan.replace(/[^0-9-]/g, ''));
+        const loanDisplay = (loanNum < 0 ? '-' : '') + '$' + Math.abs(loanNum).toLocaleString();
+        const gap = '<div style="height:8px"></div>';
+        document.getElementById('simplicity').innerHTML =
+          thingsRow('Home Loan', loanDisplay, loanNum < 0 ? '#FF4444' : '#D0E700', `forecast end ${data.homeloan_end}`) + gap +
+          thingsRow('Kiwisaver Dave', '$' + data.kiwisaver_dave.toLocaleString()) +
+          thingsRow('Kiwisaver Gabba', '$' + data.kiwisaver_gabba.toLocaleString()) +
+          thingsRow('Punakaiki', '$' + data.punakaiki.toLocaleString());
       });
     }
 
@@ -190,14 +207,16 @@
     }
 
     function the100x60weeks() {
-      fetch('the100x60weeks').then(r => r.text()).then(data => {
-        document.getElementById('the100x60weeks').innerHTML = data;
+      fetch('the100x60weeks').then(r => r.json()).then(data => {
+        document.getElementById('the100x60weeks').innerHTML =
+          thingsRow('Total Retirement Savings', '$' + data.total_savings.toLocaleString(), null, `retiring in ${data.retirement_months} months`);
       });
     }
 
     function sharesies() {
-      fetch('sharesies').then(r => r.text()).then(data => {
-        document.getElementById('sharesies').innerHTML = data;
+      fetch('sharesies').then(r => r.json()).then(data => {
+        document.getElementById('sharesies').innerHTML =
+          thingsRow('Sharesies', '$' + data.balance.toLocaleString(), null, `change today: $${data.change}`);
       });
     }
 
@@ -269,7 +288,7 @@
       fetch('outdoortemperature').then(r => r.text()).then(data => {
         document.getElementById('outsidenow').textContent = data;
         storeTempReading('outside_temp_history', data);
-        renderTempChart('outsidenow', 'outside_temp_chart', 'outside_temp_history', 12, 32);
+        renderTempChart('outsidenow', 'outside_temp_chart', 'outside_temp_history', 5, 32);
       });
     }
 
@@ -277,7 +296,7 @@
       fetch('indoortemperature').then(r => r.text()).then(data => {
         document.getElementById('insidenow').innerHTML = data;
         storeTempReading('inside_temp_history', data);
-        renderTempChart('insidenow', 'inside_temp_chart', 'inside_temp_history', 16, 26);
+        renderTempChart('insidenow', 'inside_temp_chart', 'inside_temp_history', 5, 32);
       });
     }
 
@@ -324,14 +343,49 @@
     }
 
     function thesun() {
-      fetch('thesun').then(r => r.text()).then(data => {
-        document.getElementById('thesun').innerHTML = data;
+      fetch('thesun').then(r => r.json()).then(data => {
+        document.getElementById('thesun').innerHTML =
+          `The Sun: <strong>${data.sunrise}</strong> and <strong>${data.sunset}</strong>`;
       });
     }
 
+    const CLIMACON = {
+      'partly-cloudy': "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>",
+      'few-showers': "<span class='fs1 climacon showers sun' aria-hidden='true'></span>",
+      'showers': "<span class='fs1 climacon showers' aria-hidden='true'></span>",
+      'rain': "<span class='fs1 climacon rain' aria-hidden='true'></span>",
+      'fine': "<span class='fs1 climacon sun' aria-hidden='true'></span>",
+      'cloudy': "<span class='fs1 climacon cloud' aria-hidden='true'></span>",
+      'wind-rain': "<span class='fs1 climacon wind cloud' aria-hidden='true'></span>",
+      'drizzle': "<span class='fs1 climacon drizzle' aria-hidden='true'></span>",
+      'windy': "<span class='fs1 climacon wind' aria-hidden='true'></span>",
+      'thunder': "<span class='fs1 climacon lightning' aria-hidden='true'></span>",
+    };
+
+    function pressureIcon(direction) {
+      if (['up', 'upslowly', 'upslowly-goodcoming'].includes(direction))
+        return "<i class='material-icons'>arrow_upward</i>";
+      if (['down', 'downslowly', 'downslowly-nogoodcoming'].includes(direction))
+        return "<i class='material-icons'>arrow_downward</i>";
+      return "<i class='material-icons'>arrow_forward</i>";
+    }
+
     function weather() {
-      fetch('weather').then(r => r.text()).then(data => {
-        document.getElementById('weather').innerHTML = data;
+      fetch('weather').then(r => r.json()).then(data => {
+        document.getElementById('weather').innerHTML =
+          `${data.today.forecast}<br>
+          Max: ${data.today.max}&deg; &nbsp; Min: ${data.today.min}&deg;<br><br>
+          <strong>Tomorrow</strong> &nbsp;&nbsp;&nbsp; Max: ${data.tomorrow.max}&deg; &nbsp; Min: ${data.tomorrow.min}&deg;<br>
+          ${data.tomorrow.forecast}<br>
+          <br>
+          <table width="100%">
+            <tr><td>Pressure</td><td>Saturday</td><td>Sunday</td></tr>
+            <tr>
+              <td><h3>${data.pressure.value}${pressureIcon(data.pressure.direction)}</h3></td>
+              <td>${CLIMACON[data.saturday] || ''}</td>
+              <td>${CLIMACON[data.sunday] || ''}</td>
+            </tr>
+          </table>`;
       });
     }
 

@@ -1,4 +1,4 @@
-from flask import Flask, Response
+from flask import Flask, Response, jsonify
 from flask import render_template
 from datetime import datetime as dt
 from datetime import datetime
@@ -95,14 +95,14 @@ def outdoorTemperature():
 def outsidehighslows():
     outdoorHigh = r.get("outdoorHigh") + "&deg;"
     outdoorLow = r.get("outdoorLow") + "&deg;"
-    html = "Today's High: " +  outdoorHigh + "<br />  Today's Low: " + outdoorLow + "</p>"
+    html = "<i class='material-icons' style='vertical-align:middle'>arrow_upward</i>" + outdoorHigh + "  <i class='material-icons' style='vertical-align:middle'>arrow_downward</i>" + outdoorLow
     return html
 
 @app.route("/insidehighslows")
 def insidehighslows():
     indoorHigh = r.get("indoorHigh") + "&deg;"
     indoorLow = r.get("indoorLow") + "&deg;"
-    html = "Today's High: " +  indoorHigh + "<br />  Todays Low: " + indoorLow + "</p>"
+    html = "<i class='material-icons' style='vertical-align:middle'>arrow_upward</i>" + indoorHigh + "  <i class='material-icons' style='vertical-align:middle'>arrow_downward</i>" + indoorLow
     return html
 
 @app.route("/gettime")
@@ -144,16 +144,11 @@ def the100x60project():
 
 @app.route("/the100x60weeks")
 def the100x60weeks():
-    # d1 = date.today()
-    # d2 = date(2027,11,17)
-    # weeks = (d2-d1).days//7
-    # the100x60project = int(r.get('total100x60'))
-    # averageperweektogo = int("100000") - int(the100x60project)
-    # averageperweektogo = int(averageperweektogo) / weeks
-    # averageperweektogo = str(averageperweektogo)
     totalsavings = int(r.get('totalsavings'))
-    html = "<br>Total Retirement Savings: <strong>$" + "{:,}".format(totalsavings) + "</strong>"
-    return html
+    return jsonify({
+        'total_savings': totalsavings,
+        'retirement_months': months_until_retirement(),
+    })
 
 @app.route("/rainradar")
 def rainradar():
@@ -162,37 +157,28 @@ def rainradar():
 
 @app.route("/isobars")
 def isobars():
-    isobars = "<img src='/static/isobars.jpeg?v=" + str(uuid.uuid4()) + "' width='400' align='left'>"
+    isobars = "<img src='/static/isobars/isobars_loop.gif?v=" + str(uuid.uuid4()) + "' width='400' align='left'>"
     return isobars
 
 @app.route("/thesun")
 def thesun():
-
-    sunrise = format_time_with_am_pm(r.get('sunrise'))
-    sunset = format_time_with_am_pm(r.get('sunset'))
-    html = "<span>The Sun: <strong>" + sunrise + "</strong>  and <strong>" + sunset + "</strong></span>"
-    
-    return html
+    return jsonify({
+        'sunrise': format_time_with_am_pm(r.get('sunrise')),
+        'sunset': format_time_with_am_pm(r.get('sunset')),
+    })
 
 @app.route("/simplicity")
 def simplicity():
-    simplicityDave = r.get("simplicityDave")
-    simplicityGabba = r.get("simplicityGabba")
     homeloanbalance = r.get('homeloanbalance')
-    punakaikicurrentvalue = "11336"
-    homeloanmonths = homeloanbalance.split(".")[0].replace("-", "").replace(",", "")
-    homeloanmonths = int(homeloanmonths) / 4000
-    homeloanTarget= date.today() + relativedelta(months=+int(homeloanmonths))
+    punakaikicurrentvalue = 11336
+    homeloanmonths = int(homeloanbalance.split(".")[0].replace("-", "").replace(",", "")) / 4000
+    homeloanTarget = date.today() + relativedelta(months=+int(homeloanmonths))
 
-    html = "Home Loan:<strong> " +  homeloanbalance.split(".")[0] + "</strong><br>Forecast end date: <strong>" + homeloanTarget.strftime("%b %Y") + "</strong><br><br>Kiwisaver Dave:<strong> $" + "{:,}".format(int(simplicityDave)) + "<br></strong>Kiwisaver Gabba:<strong> $" + "{:,}".format(int(simplicityGabba)) + "<br></strong>Punakaiki:<strong> $" + "{:,}".format(int(punakaikicurrentvalue))  + "</strong> <br> Retiring in <strong>" + str(months_until_retirement()) + "</strong> months" 
-
-    # Calculate the100x60project balance here only because I have most of the values needed already
     sharesiesbalance = int(r.get('sharesies'))
-    simplicityDave = simplicityDave.replace(",", "").replace("$", "").replace(".", "")
-    simplicityGabba = simplicityGabba.replace(",", "").replace("$", "").replace(".", "")
-    totalsavings = int(simplicityDave) + int(simplicityGabba) + int(punakaikicurrentvalue) + int(sharesiesbalance) 
-    #networth = int(totalsavings) + int(1000000) - int(homeloanbalance)
-    the100x60projectbalance = int(punakaikicurrentvalue) + int(sharesiesbalance)
+    dave_int = int(r.get("simplicityDave").replace(",", "").replace("$", "").replace(".", ""))
+    gabba_int = int(r.get("simplicityGabba").replace(",", "").replace("$", "").replace(".", ""))
+    totalsavings = dave_int + gabba_int + punakaikicurrentvalue + sharesiesbalance
+    the100x60projectbalance = punakaikicurrentvalue + sharesiesbalance
 
     broker = "192.168.1.2"
     port = 1883
@@ -204,11 +190,17 @@ def simplicity():
 
     client1.on_connect = on_connect
     client1.publish("house/money/total100x60", the100x60projectbalance)
-    #client1.publish("house/money/networth", networth)
     client1.publish("house/money/totalsavings", totalsavings)
     client1.disconnect()
 
-    return html
+    return jsonify({
+        'homeloan': homeloanbalance.split(".")[0],
+        'homeloan_end': homeloanTarget.strftime("%b %Y"),
+        'kiwisaver_dave': dave_int,
+        'kiwisaver_gabba': gabba_int,
+        'punakaiki': punakaikicurrentvalue,
+        'retirement_months': months_until_retirement(),
+    })
 
 @app.route("/sharesies")
 def sharesies():
@@ -219,8 +211,10 @@ def sharesies():
     change = sharesiesbalance - yesterdaysbalance[1]
     cursor.close()
     r.set('sharesieschange', int(change))
-    html = "Sharesies:<strong> $" + str("{:,}".format(sharesiesbalance)) + "</strong></br> Change today: $" + str(change).split(".")[0]
-    return html
+    return jsonify({
+        'balance': sharesiesbalance,
+        'change': int(change),
+    })
 
 @app.route("/websitecomments")
 def websitecomments():
@@ -237,32 +231,6 @@ def websitecomments():
     else:
         html = ""
     return html
-
-@app.route("/i3chargingstatus")
-def i3chargingstatus():
-    i3chargingstatus = r.get('i3chargingstatus')
-    if i3chargingstatus == "CHARGING":
-        charging = " CHARGING"
-        i3chargecompletiontime = r.get('i3chargecompletiontime')
-        # Convert the given datetime string to a datetime object
-        dete = datetime.fromisoformat(i3chargecompletiontime)
-        # Set the timezone to NZ
-        nz_tz = pytz.timezone('Pacific/Auckland')
-        dt_nz = dete.astimezone(nz_tz)
-        # Print the NZ timezone time
-        i3chargecompletiontime_formatted_time = dt_nz.strftime('%Y-%m-%d %H:%M')
-        html = f"<strong>{r.get('i3batteryremaining')}% {charging} until  {i3chargecompletiontime_formatted_time}</strong>"
-    else:
-        charging = ""
-        #html = f"Battery Remaining: <strong>{r.get('i3batteryremaining')}%</strong>"
-        html = f"<div class='audienceGraph' id='audience_caffeination_percentage' style='width:{int(r.get('i3batteryremaining')) - 5}%;'><span class='audiencePercent caffeination_level_1'>{r.get('i3batteryremaining')}%</span>"
-
-    return html
-
-@app.route("/i3rangeremaining")
-def i3rangeremaining():
-    i3rangeremaining = f"{r.get('i3rangeremaining')}"
-    return i3rangeremaining
 
 @app.route("/gardenlights")
 def gardenlights():
@@ -355,92 +323,25 @@ def location_stream():
 
 @app.route("/weather")
 def weather():
-
-    todayforecast = r.get("todayForecast")
-    todaymax = r.get("todayMax")
-    todaymin = r.get("todayMin")
-
-    tomorrowforecast = r.get("tomorrowForecast")
-    tomorrowmax = r.get("tomorrowMax")
-    tomorrowmin = r.get("tomorrowMin")
-
-    saturday = r.get("saturdayCondition")
-    print(saturday)
-    sunday = r.get("sundayCondition")
-    print(saturday)
-   
-    if saturday == "partly-cloudy":
-        saturdayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
-    if saturday == "few-showers":
-        saturdayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
-    if saturday == "showers":
-        saturdayicon = "<span class='fs1 climacon showers' aria-hidden='true'></span>"
-    if saturday == "rain":
-        saturdayicon = "<span class='fs1 climacon rain' aria-hidden='true'></span>"
-    if saturday == "fine":
-        saturdayicon = "<span class='fs1 climacon sun' aria-hidden='true'></span>"
-    if saturday == "cloudy":
-        saturdayicon = "<span class='fs1 climacon cloud' aria-hidden='true'></span>"
-    if saturday == "wind-rain":
-        saturdayicon = "<span class='fs1 climacon wind cloud' aria-hidden='true'></span>"
-    if saturday == "drizzle":
-        saturdayicon = "<span class='fs1 climacon drizzle' aria-hidden='true'></span>"
-    if saturday == "windy":
-        saturdayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
-    if saturday == "thunder":
-        saturdayicon = "<span class='fs1 climacon lightning' aria-hidden='true'></span>"
-
-    if sunday == "partly-cloudy":
-        sundayicon = "<span class='fs1 climacon cloud sun' aria-hidden='true'></span>"
-    if sunday == "few-showers":
-        sundayicon = "<span class='fs1 climacon showers sun' aria-hidden='true'></span>"
-    if sunday == "showers":
-        sundayicon = "<span class='fs1 climacon showers' aria-hidden='true'></span>"
-    if sunday == "rain":
-        sundayicon = "<span class='fs1 climacon rain' aria-hidden='true'></span>"
-    if sunday == "fine":
-        sundayicon = "<span class='fs1 climacon sun' aria-hidden='true'></span>"
-    if sunday == "cloudy":
-        sundayicon = "<span class='fs1 climacon cloud' aria-hidden='true'></span>"
-    if sunday == "wind-rain":
-        sundayicon = "<span class='fs1 climacon wind cloud' aria-hidden='true'></span>"
-    if sunday == "drizzle":
-        sundayicon = "<span class='fs1 climacon drizzle' aria-hidden='true'></span>"
-    if sunday == "windy":
-        sundayicon = "<span class='fs1 climacon wind' aria-hidden='true'></span>"
-    if sunday == "thunder":
-        sundayicon = "<span class='fs1 climacon lightning' aria-hidden='true'></span>"
-
-    pressuredirection = r.get("pressureDirection")
-    if pressuredirection == "up":
-        pressuredirectionicon= "<i class='material-icons' >arrow_upward</i>"
-    if pressuredirection == "upslowly":
-        pressuredirectionicon= "<i class='material-icons' >arrow_upward</i>"
-    if pressuredirection == "upslowly-goodcoming":
-        pressuredirectionicon= "<i class='material-icons' >arrow_upward</i>"
-    if pressuredirection == "downslowly":
-        pressuredirectionicon= "<i class='material-icons' >arrow_downward</i>"
-    if pressuredirection == "down":
-        pressuredirectionicon= "<i class='material-icons' >arrow_downward</i>"
-    if pressuredirection == "downslowly-nogoodcoming":
-        pressuredirectionicon= "<i class='material-icons' >arrow_downward</i>"
-    if pressuredirection == "stable":
-        pressuredirectionicon= "<i class='material-icons' >arrow_forward</i>"
-
-
     indoorPressure = r.get("indoorPressure")
-    indoorPressure = indoorPressure[0:-2]
-
-    html = todayforecast + "<br>"
-    html += "Max: " + todaymax + "&deg;  Min: " + todaymin + "&deg;<br><br>"
-    html += "<strong>Tomorrow</strong> &nbsp; &nbsp; &nbsp; Max: " +  tomorrowmax + "&deg;  Min: " + tomorrowmin + "&deg;<br>"
-    html +=  tomorrowforecast + "<br>"
-    html += "<br><table width=100%><tr><td>Pressure</td><td>Saturday</td><td>Sunday</td></tr>"
-    html += "<tr><td><h3>" + indoorPressure + pressuredirectionicon + "</h3></td>"
-    html += "<td>" + saturdayicon + "</td>"
-    html += "<td>" + sundayicon + "</td></tr></table>"
-
-    return html
+    return jsonify({
+        'today': {
+            'forecast': r.get("todayForecast"),
+            'max': r.get("todayMax"),
+            'min': r.get("todayMin"),
+        },
+        'tomorrow': {
+            'forecast': r.get("tomorrowForecast"),
+            'max': r.get("tomorrowMax"),
+            'min': r.get("tomorrowMin"),
+        },
+        'saturday': r.get("saturdayCondition"),
+        'sunday': r.get("sundayCondition"),
+        'pressure': {
+            'value': indoorPressure[0:-2],
+            'direction': r.get("pressureDirection"),
+        },
+    })
 
 if __name__ == "__main__":
     app.run()
